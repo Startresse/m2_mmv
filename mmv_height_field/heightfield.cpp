@@ -26,7 +26,7 @@ double HeightField::Slope(int i, int j) const
 QVector3D HeightField::p_3d(int i, int j) const
 {
     QVector3D ret;
-    QVector2D xy = Grid2::Vertex(i, j);
+    QVector2D xy = Grid2::vertex(i, j);
     ret.setX(xy.x());
     ret.setY(xy.y());
     ret.setZ(Height(i, j));

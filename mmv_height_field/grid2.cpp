@@ -18,11 +18,17 @@ bool Grid2::border(int i, int j) const
     return i == 0 || j == 0 || i == nx - 1 || j == ny - 1;
 }
 
-QVector2D Grid2::Vertex(int i, int j) const
+QVector2D Grid2::vertex(int i, int j) const
 {
     double u = double(i) / (nx - 1);
     float x = (1 - u) * b_min.x() + u * b_max.x();
     double v = double(j) / (ny - 1);
     float y = (1 - v) * b_min.y() + v * b_max.y();
     return QVector2D(x, y);
+}
+
+
+bool Grid2::operator==(const Grid2& b) const
+{
+    return static_cast<Box2>(*this) == static_cast<Box2>(b) && nx == b.nx && ny == b.ny;
 }

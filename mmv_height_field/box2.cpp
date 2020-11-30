@@ -12,9 +12,9 @@ Box2::Box2(const QVector2D& min, const QVector2D& max)
     b_max = max;
 }
 
-Box2::Box2(float x, float y) {
-    b_min = QVector2D(-x/2, -y/2);
-    b_max = QVector2D( x/2,  y/2);
+Box2::Box2(double x, double y) {
+    b_min = QVector2D(-x/2.0, -y/2.0);
+    b_max = QVector2D( x/2.0,  y/2.0);
 }
 
 Box2::Box2(const Box2& b) {
@@ -23,7 +23,7 @@ Box2::Box2(const Box2& b) {
 }
 
 
-bool Box2::inside(const QVector2D& p)
+bool Box2::inside(const QVector2D& p) const
 {
     return !(
         p.x() > b_max.x() ||
@@ -32,7 +32,7 @@ bool Box2::inside(const QVector2D& p)
         p.y() < b_min.y());
 }
 
-bool Box2::intersect(const Box2& b)
+bool Box2::intersect(const Box2& b) const
 {
     return !(
         b.b_min.x() > b_max.x() ||
@@ -41,6 +41,7 @@ bool Box2::intersect(const Box2& b)
         b.b_max.y() < b_min.y());
 }
 
-bool Box2::operator==(const Box2& b) {
+bool Box2::operator==(const Box2& b) const
+{
     return b.b_max == b_max && b.b_min == b_min;
 }
