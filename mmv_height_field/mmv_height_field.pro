@@ -13,6 +13,7 @@ SOURCES += \
     grid2.cpp \
     heightfield.cpp \
     main.cpp \
+    scalarpoint2.cpp \
     sf2.cpp \
     widget.cpp
 
@@ -20,6 +21,7 @@ HEADERS += \
     box2.h \
     grid2.h \
     heightfield.h \
+    scalarpoint2.h \
     sf2.h \
     widget.h
 

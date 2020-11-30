@@ -3,27 +3,39 @@
 
 #include <QVector3D>
 #include <QImage>
+#include <math.h>
 
+#include "scalarpoint2.h"
 #include "sf2.h"
 
 class HeightField : public SF2
 {
+protected:
+    double low;
+    double high;
+
 public:
-    HeightField();
+    HeightField(const SF2&);
+    HeightField(const QImage&, const Box2, double, double);
 
-    double Height(int i, int j) const;
-    double Slope(int i, int j) const;
+    double height(int i, int j) const;
+    double slope(int i, int j) const;
+    double average_slope(int i, int j) const;
 
-    double AverageSlope(int i, int j) const;
+    QVector3D vertex(int i, int j) const;
+    QVector3D normal(int i, int j) const;
 
-    QVector3D p_3d(int i, int j) const;
-    QVector3D n_3d(int i, int j) const;
+    std::vector<ScalarPoint2> get_scalar_points() const;
+    int check_flow_slope(const QPoint&, QPoint*, double*, double*) const;
+
+    SF2 slope_map() const;
+    SF2 laplacian_map() const;
+    SF2 stream_area() const;
 
     void Shade() const;
 
-    QImage Export() const;
+    QImage export_image() const;
 
-    SF2 StreamArea() const;
 };
 
 #endif // HEIGHTFIELD_H

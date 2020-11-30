@@ -1,8 +1,12 @@
 #include "sf2.h"
 
-SF2::SF2()
-{
+SF2::SF2() : SF2(Grid2(), 0.0) { }
 
+SF2::SF2(const Grid2& g) : SF2(g, 0.0) { }
+
+SF2::SF2(const Grid2& g, double val) : Grid2(g)
+{
+    field.resize(nx * ny, val);
 }
 
 double SF2::at(int i, int j) const
@@ -18,15 +22,41 @@ QVector2D SF2::Gradient(int i, int j) const
 {
     QVector2D g;
 
-    if (!border(i, j)) {
-        g.setX(at(i + 1, j) - at(i - 1, j)); // coord inverse diag + border !!
-        g.setY(at(i, j + 1) - at(i, j - 1)); // * 0.5 * inve diag
-    }
+    if (i == 0)
+        g.setX( (at(i + 1, j) - at(i, j)    )       * inv_cell_diag.x() );
+    else if (i == nx - 1)
+        g.setX( (at(i, j) 	  - at(i - 1, j)) 	    * inv_cell_diag.x() );
+    else
+        g.setX( (at(i + 1, j) - at(i - 1, j)) * 0.5 * inv_cell_diag.x() );
+
+    if (j == 0)
+        g.setY( (at(i, j + 1) - at(i, j)    )       * inv_cell_diag.y() );
+    else if (j == ny - 1)
+        g.setY( (at(i, j) 	  - at(i, j - 1)) 	    * inv_cell_diag.y() );
+    else
+        g.setY( (at(i, j + 1) - at(i, j - 1)) * 0.5 * inv_cell_diag.y() );
+
 
     return g;
-
-    //df/dx,df/dy ~ ( (f(x+e,y)-f(x-e,y))/2e , ... ) { Vec2 n; // Gradient along x axis if (i == 0) { n[0] = (at(i + 1, j) - at(i, j)) * inversecelldiagonal[0]; } else if (i == nx - 1) { n[0] = (at(i, j) - at(i - 1, j)) * inversecelldiagonal[0]; } else { n[0] = (at(i + 1, j) - at(i - 1, j)) *0.5 * inversecelldiagonal[0]; } // Gradient along y axis if (j == 0) { n[1] = (at(i, j + 1) - at(i, j)) * inversecelldiagonal[1]; } else if (j == ny - 1) { n[1] = (at(i, j) - at(i, j - 1)) * inversecelldiagonal[1]; } else { n[1] = (at(i, j + 1) - at(i, j - 1)) * 0.5 * inversecelldiagonal[1]; } return n; }
-
 }
 
-// d2f / dx2 ~ (f(x+e)-2f(x)+f(x+e))/(e^2) { double laplacian = 0.0; // Divergence along x axis if (i == 0) { laplacian += (at(i, j) - 2.0 * at(i + 1, j) + at(i + 2, j)) / (celldiagonal[0] * celldiagonal[0]); } else if (i == nx - 1) { laplacian += (at(i, j) - 2.0 * at(i - 1, j) + at(i - 2, j)) / (celldiagonal[0] * celldiagonal[0]); } else { laplacian += (at(i + 1, j) - 2.0 * at(i, j) + at(i - 1, j)) / (celldiagonal[0] * celldiagonal[0]); } // Divergence along y axis if (j == 0) { laplacian += (at(i, j) - 2.0 * at(i, j + 1) + at(i, j + 2)) / (celldiagonal[1] * celldiagonal[1]); } else if (j == ny - 1) { laplacian += (at(i, j) - 2.0 * at(i, j - 1) + at(i, j - 2)) / (celldiagonal[1] * celldiagonal[1]); } else { laplacian += (at(i, j + 1) - 2.0 * at(i, j) + at(i, j - 1)) / (celldiagonal[1] * celldiagonal[1]); } return laplacian; }
+double SF2::laplacian(int i, int j) const
+{
+    double lap = 0.0;
+
+    if (i == 0)
+        lap += (at(i	, j) - 2.0 * at(i + 1, j) + at(i + 2, j)) * inv_cell_diag.x() * inv_cell_diag.x();
+    else if (i == nx - 1)
+        lap += (at(i - 2, j) - 2.0 * at(i - 1, j) + at(i	, j)) * inv_cell_diag.x() * inv_cell_diag.x();
+    else
+        lap += (at(i - 1, j) - 2.0 * at(i	 , j) + at(i + 1, j)) * inv_cell_diag.x() * inv_cell_diag.x();
+
+    if (j == 0)
+        lap += (at(i, j    ) - 2.0 * at(i, j + 1) + at(i, j + 2)) * inv_cell_diag.y() * inv_cell_diag.y();
+    else if (j == ny - 1)
+        lap += (at(i, j - 2) - 2.0 * at(i, j - 1) + at(i, j	   )) * inv_cell_diag.y() * inv_cell_diag.y();
+    else
+        lap += (at(i, j - 1) - 2.0 * at(i, j	) + at(i, j + 1)) * inv_cell_diag.y() * inv_cell_diag.y();
+
+    return lap;
+}

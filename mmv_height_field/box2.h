@@ -1,6 +1,7 @@
 #ifndef BOX2_H
 #define BOX2_H
 
+#include <iostream>
 #include <QVector2D>
 
 class Box2
@@ -24,6 +25,8 @@ public:
     double max_y() const {return b_max.y();}
 
     bool operator==(const Box2&) const;
+
+    static void test();
 };
 
 #endif // BOX2_H

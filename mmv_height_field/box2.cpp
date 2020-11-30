@@ -45,3 +45,28 @@ bool Box2::operator==(const Box2& b) const
 {
     return b.b_max == b_max && b.b_min == b_min;
 }
+
+
+void Box2::test()
+{
+    std::cout << "test box...";
+    Box2 b(QVector2D(-1, -1), QVector2D(1, 1));
+    Box2 c(QVector2D(1, 1), QVector2D(3, 3));
+    assert(b.intersect(c));
+
+    Box2 a(2, 1);
+    assert(a.min_x() == -1 && a.max_x() == 1 && a.min_y() == -0.5 && a.max_y() == 0.5);
+    assert(a.inside(QVector2D(0, 0)));
+    assert(a.inside(QVector2D(1, 0)));
+    assert(!a.inside(QVector2D(2, 0)));
+    assert(!a.inside(QVector2D(0, 10)));
+
+    Box2 aa(a);
+    assert(aa == a);
+
+    Box2 empt;
+    assert(empt.max_x() == 0.0 && empt.min_x() == 0.0 && empt.max_y() == 0.0 && empt.min_y() == 0.0);
+
+    std::cout << " Done!" << std::endl;
+
+}
