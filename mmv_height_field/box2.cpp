@@ -40,3 +40,7 @@ bool Box2::intersect(const Box2& b)
         b.b_max.x() < b_min.x() ||
         b.b_max.y() < b_min.y());
 }
+
+bool Box2::operator==(const Box2& b) {
+    return b.b_max == b_max && b.b_min == b_min;
+}

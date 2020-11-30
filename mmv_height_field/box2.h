@@ -17,6 +17,13 @@ public:
 
     bool inside(const QVector2D&) ;
     bool intersect(const Box2&) ;
+
+    double min_x() {return b_min.x();}
+    double min_y() {return b_min.y();}
+    double max_x() {return b_max.x();}
+    double max_y() {return b_max.y();}
+
+    bool operator==(const Box2&);
 };
 
 #endif // BOX2_H
