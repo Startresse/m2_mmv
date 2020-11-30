@@ -22,7 +22,8 @@ int main(int argc, char *argv[])
     // tests
     unitary_tests();
     QImage image;
-    image.load("images/image.png");
+    image.load("images/test01.png");
+    std::cout << image.width() << ", " << image.height() << std::endl;
     image.save("images/modified_image.png");
     return 0;
 
