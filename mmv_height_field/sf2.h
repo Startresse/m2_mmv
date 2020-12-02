@@ -20,6 +20,8 @@ public:
 
     double at(int i, int j) const;
     double& at(int i, int j);
+    double at(const QPoint&) const;
+    double& at(const QPoint&);
 
     QVector2D Gradient(int i, int j) const;
     double laplacian(int i, int j) const;

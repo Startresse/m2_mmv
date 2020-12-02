@@ -124,6 +124,7 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
             double step = height(k, l) - zp;
             if (step < -eps) {
                 q[n] = QPoint(k, l);
+                assert(q[n].x() != i || q[n].y() != j);
                 h[n] = -step;
 
                 s[n] = -step;
@@ -137,9 +138,11 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
 
         }
     }
+    assert (n < 9);
 
     for (int i = 0; i < n; ++i) {
         sn[i] = s[i] / slopesum;
+        assert(sn[i] <= 1.0);
     }
 
     return n;
@@ -160,7 +163,7 @@ SF2 HeightField::stream_area() const
     for (int i = points.size() - 1; i >= 0; --i)
     {
         const QPoint& p = points[i].point();
-        const double sp = sa.at(p.x(), p.y());
+        const double sp = sa.at(p);
 
         QPoint q[8];		// struct ?
         double h[8];
@@ -171,17 +174,17 @@ SF2 HeightField::stream_area() const
         if (n == 0)
             continue;
 
-        double ss = s[0];
-        int k = 0;
+//        double ss = s[0];
+//        int k = 0;
         double checksum = 0.0;
         for (int j = 0; j < n; ++j) {
             checksum += sn[j];
-            sa.at(q[j].x(), q[j].y()) += sp/sn[j];
-            if (s[j] > ss)
-            {
-                ss = s[j];
-                k = j;
-            }
+            sa.at(q[j]) += sp*sn[j];
+//            if (s[j] > ss)
+//            {
+//                ss = s[j];
+//                k = j;
+//            }
         }
         assert(abs(checksum - 1.0) < eps);
 

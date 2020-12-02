@@ -18,6 +18,10 @@ double& SF2::at(int i, int j)
     return field[index(i, j)];
 }
 
+double SF2::at(const QPoint& p) const {return at(p.x(), p.y());}
+double& SF2::at(const QPoint& p) {return at(p.x(), p.y());}
+
+
 QVector2D SF2::Gradient(int i, int j) const
 {
     QVector2D g;
@@ -78,15 +82,19 @@ QImage SF2::save(double contrast) const
         }
     }
 
+    std::cout << min << ", " << max << std::endl;
+
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
-            if (min == max) {
+            if (abs(min - max) <= eps) {
                 image.setPixel(i, j, qRgb(125, 125, 125));
                 continue;
             }
             float val = at(i, j);
             val = (val - min)/(max - min);
 
+//            if (val < 0.0 || val > 1.0)
+//                std::cout << at(i, j) << " | " << val << std::endl;
             if (contrast != 1.0)
                 assert(val >= -eps && val <= 1.0 + eps);
 
