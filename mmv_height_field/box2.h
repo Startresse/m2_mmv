@@ -26,7 +26,7 @@ public:
 
     bool operator==(const Box2&) const;
 
-    static void test();
+    static void test(bool verbose = false);
 };
 
 #endif // BOX2_H

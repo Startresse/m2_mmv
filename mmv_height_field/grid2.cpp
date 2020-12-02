@@ -42,9 +42,10 @@ bool Grid2::operator==(const Grid2& b) const
     return static_cast<Box2>(*this) == static_cast<Box2>(b) && nx == b.nx && ny == b.ny;
 }
 
-void Grid2::test()
+void Grid2::test(bool verbose)
 {
-    std::cout << "test grid...";
+    if (verbose)
+        std::cout << "test grid...";
 
     Box2 b(50, 100);
     Grid2 a(b, 10, 10);
@@ -55,5 +56,6 @@ void Grid2::test()
     Grid2 aa(a);
     assert(a == aa);
 
-    std::cout << " Done!" << std::endl;
+    if (verbose)
+        std::cout << " Done!" << std::endl;
 }

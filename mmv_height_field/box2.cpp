@@ -47,9 +47,10 @@ bool Box2::operator==(const Box2& b) const
 }
 
 
-void Box2::test()
+void Box2::test(bool verbose)
 {
-    std::cout << "test box...";
+    if (verbose)
+        std::cout << "test box...";
     Box2 b(QVector2D(-1, -1), QVector2D(1, 1));
     Box2 c(QVector2D(1, 1), QVector2D(3, 3));
     assert(b.intersect(c));
@@ -67,6 +68,7 @@ void Box2::test()
     Box2 empt;
     assert(empt.max_x() == 0.0 && empt.min_x() == 0.0 && empt.max_y() == 0.0 && empt.min_y() == 0.0);
 
-    std::cout << " Done!" << std::endl;
+    if (verbose)
+        std::cout << " Done!" << std::endl;
 
 }

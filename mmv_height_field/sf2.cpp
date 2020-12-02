@@ -60,3 +60,37 @@ double SF2::laplacian(int i, int j) const
 
     return lap;
 }
+
+const double eps = 0.00001;
+QImage SF2::save(double contrast) const
+{
+    QImage image(nx, ny, QImage::Format_ARGB32);
+
+    double max = at(0, 0);
+    double min = at(0, 0);
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            double val = at(i, j);
+            if(val > max)
+                max = val;
+            if(val < min)
+                min = val;
+        }
+    }
+
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            float val = at(i, j);
+            val = (val - min)/(max - min);
+
+            if (contrast != 1.0)
+                assert(val >= -eps && val <= 1.0 + eps);
+
+            val = pow(val, contrast);
+            val *= 255;
+            image.setPixel(i, j, qRgb(val, val, val));
+        }
+    }
+
+    return image;
+}

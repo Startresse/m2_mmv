@@ -25,7 +25,7 @@ public:
 
     bool operator==(const Grid2&) const;
 
-    static void test();
+    static void test(bool verbose = false);
 };
 
 #endif // GRID2_H

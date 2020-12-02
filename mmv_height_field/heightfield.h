@@ -4,6 +4,7 @@
 #include <QVector3D>
 #include <QImage>
 #include <math.h>
+#include <QRgb>
 
 #include "scalarpoint2.h"
 #include "sf2.h"
@@ -16,7 +17,7 @@ protected:
 
 public:
     HeightField(const SF2&);
-    HeightField(const QImage&, const Box2, double, double);
+    HeightField(const QImage&, const Box2&, double, double);
 
     double height(int i, int j) const;
     double slope(int i, int j) const;
@@ -34,7 +35,7 @@ public:
 
     void Shade() const;
 
-    QImage export_image() const;
+    QImage render(double contrast = 1.0) const;
 
 };
 

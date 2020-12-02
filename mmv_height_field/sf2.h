@@ -2,6 +2,8 @@
 #define SF2_H
 
 #include <QVector>
+#include <QImage>
+#include <math.h>
 
 #include "grid2.h"
 
@@ -22,7 +24,7 @@ public:
     QVector2D Gradient(int i, int j) const;
     double laplacian(int i, int j) const;
 
-    void save() const;
+    QImage save(double contrast = 1.0) const;
 };
 
 #endif // SF2_H

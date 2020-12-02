@@ -5,10 +5,16 @@ HeightField::HeightField(const SF2& s) : SF2(s)
 
 }
 
-HeightField::HeightField(const QImage& im, const Box2 b, double low, double high)
+HeightField::HeightField(const QImage& im, const Box2& b, double low, double high)
     : SF2(Grid2(b, im.width(), im.height())), low(low), high(high)
 {
-
+    QImage gs = im.convertToFormat(QImage::Format_Grayscale8);
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            at(i, j) = (high - low)*qGray(gs.pixel(i, j))/255.0 + low;
+            assert(height(i, j) >= low && height(i, j) <= high);
+        }
+    }
 }
 
 
@@ -111,13 +117,14 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
             if (!inside(k, l) || (ii == 0 && jj == 0))
                 continue;
 
+            bool diag = ii * jj;
             double step = height(k, l) - zp;
             if (step < 0.0) {
                 q[n] = QPoint(k, l);
                 h[n] = -step;
 
                 s[n] = -step;
-                if(ii * jj)	// if diagonal
+                if(diag)
                     s[n] *= inv_sqrt_2;
 
                 ++n;
@@ -130,7 +137,7 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
 }
 
 
-// steepsest
+// steepest
 SF2 HeightField::stream_area() const
 {
     std::vector<ScalarPoint2> points = get_scalar_points();
@@ -144,7 +151,7 @@ SF2 HeightField::stream_area() const
     for (uint i = points.size() - 1; i >= 0; --i)
     {
         const QPoint& p = points[i].point();
-        QPoint q[8];
+        QPoint q[8];		// struct ?
         double h[8];
         double s[8];
 
@@ -170,7 +177,9 @@ SF2 HeightField::stream_area() const
 }
 
 
-QImage HeightField::export_image() const
+
+
+QImage HeightField::render(double contrast) const
 {
     QImage image(nx, ny, QImage::Format_ARGB32);
     const QVector3D lightdir = QVector3D(2.0, 1.0, 3.0).normalized();
@@ -180,8 +189,12 @@ QImage HeightField::export_image() const
             QVector3D n = normal(i, j);
             double d = QVector3D::dotProduct(n, lightdir);
             d = (1.0 + d) / 2.0;
-            d *= d;
-            image.setPixel(i, j, d);
+
+            assert(d >= 0.0 && d <= 1.0);
+            d = pow(d, contrast);
+
+            d *= 255;
+            image.setPixel(i, j, qRgb(d, d, d));
         }
     }
 

@@ -7,24 +7,32 @@
 #include "heightfield.h"
 #include "widget.h"
 
-void unitary_tests()
+void unitary_tests(bool verbose = false)
 {
-    std::cout << "UNITARY TESTS..." << std::endl;
+    if (verbose)
+        std::cout << "UNITARY TESTS..." << std::endl;
 
-    Box2::test();
-    Grid2::test();
+    Box2::test(verbose);
+    Grid2::test(verbose);
 
-    std::cout << "PASSED !" << std::endl;
+    if (verbose)
+        std::cout << "PASSED !" << std::endl;
 }
 
 int main(int argc, char *argv[])
 {
     // tests
-    unitary_tests();
+    unitary_tests(false);
     QImage image;
-    image.load("images/test01.png");
-    std::cout << image.width() << ", " << image.height() << std::endl;
-    image.save("images/modified_image.png");
+    image.load("../images/mb_height.png");
+
+    HeightField hf(image, Box2(image.width(), image.height()), 10.0, 200.0);
+//    QImage res = hf.save();
+    QImage res = hf.render(3.0);
+//    QImage res = hf.slope_map().save();
+//    QImage res = hf.laplacian_map().save();
+
+    res.save("../images/res.png");
     return 0;
 
     QApplication a(argc, argv);
