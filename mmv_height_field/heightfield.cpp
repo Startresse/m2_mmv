@@ -90,7 +90,8 @@ SF2 HeightField::laplacian_map() const
 
 std::vector<ScalarPoint2> HeightField::get_scalar_points() const
 {
-    std::vector<ScalarPoint2> points(nx*ny);
+    std::vector<ScalarPoint2> points;
+    points.reserve(nx*ny);
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
             points.push_back(ScalarPoint2(i, j, height(i, j)));
@@ -143,12 +144,12 @@ SF2 HeightField::stream_area() const
     std::vector<ScalarPoint2> points = get_scalar_points();
     std::sort(points.begin(), points.end());
     for (uint i = 0; i < points.size() - 1; ++i) {
-        assert(points[i].z() > points[i + 1].z());
+        assert(points[i].z() <= points[i + 1].z());
     }
 
     SF2 sa = SF2(*this, 1.0);
 
-    for (uint i = points.size() - 1; i >= 0; --i)
+    for (int i = points.size() - 1; i >= 0; --i)
     {
         const QPoint& p = points[i].point();
         QPoint q[8];		// struct ?

@@ -27,10 +27,12 @@ int main(int argc, char *argv[])
     image.load("../images/mb_height.png");
 
     HeightField hf(image, Box2(image.width(), image.height()), 10.0, 200.0);
-//    QImage res = hf.save();
-    QImage res = hf.render(3.0);
+    hf.render(3.0).save("../images/relief.png");
+//    QImage res = hf.render(3.0);
+
 //    QImage res = hf.slope_map().save();
 //    QImage res = hf.laplacian_map().save();
+    QImage res = hf.stream_area().save(0.4);
 
     res.save("../images/res.png");
     return 0;
