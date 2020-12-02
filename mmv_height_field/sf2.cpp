@@ -82,8 +82,6 @@ QImage SF2::save(double contrast) const
         }
     }
 
-    std::cout << min << ", " << max << std::endl;
-
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
             if (abs(min - max) <= eps) {
@@ -93,8 +91,6 @@ QImage SF2::save(double contrast) const
             float val = at(i, j);
             val = (val - min)/(max - min);
 
-//            if (val < 0.0 || val > 1.0)
-//                std::cout << at(i, j) << " | " << val << std::endl;
             if (contrast != 1.0)
                 assert(val >= -eps && val <= 1.0 + eps);
 

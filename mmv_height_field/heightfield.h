@@ -26,8 +26,12 @@ public:
     QVector3D vertex(int i, int j) const;
     QVector3D normal(int i, int j) const;
 
+    struct FlowTiles {
+        QPoint q[8];
+        double sn[8];
+    };
     std::vector<ScalarPoint2> get_scalar_points() const;
-    int check_flow_slope(const QPoint&, QPoint*, double*, double*, double*) const;
+    int check_flow_slope(const QPoint&, FlowTiles*) const;
 
     SF2 slope_map() const;
     SF2 laplacian_map() const;

@@ -102,11 +102,14 @@ std::vector<ScalarPoint2> HeightField::get_scalar_points() const
 
 }
 
+
+
 const double eps = 0.00001;
-int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double* s, double* sn) const
+int HeightField::check_flow_slope(const QPoint& p, FlowTiles* ft) const
 {
     static const double inv_sqrt_2 = 1.0/sqrt(2.0);
     int n = 0;
+    double s[8];
 
     int i = p.x();
     int j = p.y();
@@ -123,9 +126,8 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
             bool diag = ii && jj;
             double step = height(k, l) - zp;
             if (step < -eps) {
-                q[n] = QPoint(k, l);
-                assert(q[n].x() != i || q[n].y() != j);
-                h[n] = -step;
+                ft->q[n] = QPoint(k, l);
+                assert(ft->q[n].x() != i || ft->q[n].y() != j);
 
                 s[n] = -step;
                 if(diag)
@@ -141,8 +143,8 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
     assert (n < 9);
 
     for (int i = 0; i < n; ++i) {
-        sn[i] = s[i] / slopesum;
-        assert(sn[i] <= 1.0);
+        ft->sn[i] = s[i] / slopesum;
+        assert(ft->sn[i] <= 1.0);
     }
 
     return n;
@@ -165,30 +167,18 @@ SF2 HeightField::stream_area() const
         const QPoint& p = points[i].point();
         const double sp = sa.at(p);
 
-        QPoint q[8];		// struct ?
-        double h[8];
-        double s[8];
-        double sn[8];
+        FlowTiles ft;
+        int n = check_flow_slope(p, &ft);
 
-        int n = check_flow_slope(p, q, h, s, sn);
         if (n == 0)
             continue;
 
-//        double ss = s[0];
-//        int k = 0;
         double checksum = 0.0;
         for (int j = 0; j < n; ++j) {
-            checksum += sn[j];
-            sa.at(q[j]) += sp*sn[j];
-//            if (s[j] > ss)
-//            {
-//                ss = s[j];
-//                k = j;
-//            }
+            checksum += ft.sn[j];
+            sa.at(ft.q[j]) += sp*ft.sn[j];
         }
         assert(abs(checksum - 1.0) < eps);
-
-//        sa.at(q[k].x(), q[k].y()) += sp;
     }
 
     return sa;
