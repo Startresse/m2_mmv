@@ -80,6 +80,10 @@ QImage SF2::save(double contrast) const
 
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
+            if (min == max) {
+                image.setPixel(i, j, qRgb(125, 125, 125));
+                continue;
+            }
             float val = at(i, j);
             val = (val - min)/(max - min);
 

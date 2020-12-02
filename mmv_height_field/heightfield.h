@@ -27,7 +27,7 @@ public:
     QVector3D normal(int i, int j) const;
 
     std::vector<ScalarPoint2> get_scalar_points() const;
-    int check_flow_slope(const QPoint&, QPoint*, double*, double*) const;
+    int check_flow_slope(const QPoint&, QPoint*, double*, double*, double*) const;
 
     SF2 slope_map() const;
     SF2 laplacian_map() const;

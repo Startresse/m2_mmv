@@ -102,7 +102,8 @@ std::vector<ScalarPoint2> HeightField::get_scalar_points() const
 
 }
 
-int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double* s) const
+const double eps = 0.00001;
+int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double* s, double* sn) const
 {
     static const double inv_sqrt_2 = 1.0/sqrt(2.0);
     int n = 0;
@@ -111,6 +112,7 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
     int j = p.y();
     double zp = height(i, j);
 
+    double slopesum = 0.0;
     for (int ii = -1; ii <= 1; ++ii) {
         for (int jj = -1; jj <= 1; ++jj) {
             int k = i + ii;
@@ -118,9 +120,9 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
             if (!inside(k, l) || (ii == 0 && jj == 0))
                 continue;
 
-            bool diag = ii * jj;
+            bool diag = ii && jj;
             double step = height(k, l) - zp;
-            if (step < 0.0) {
+            if (step < -eps) {
                 q[n] = QPoint(k, l);
                 h[n] = -step;
 
@@ -128,10 +130,16 @@ int HeightField::check_flow_slope(const QPoint& p, QPoint* q, double* h, double*
                 if(diag)
                     s[n] *= inv_sqrt_2;
 
+                slopesum += s[n];
+
                 ++n;
             }
 
         }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        sn[i] = s[i] / slopesum;
     }
 
     return n;
@@ -152,25 +160,32 @@ SF2 HeightField::stream_area() const
     for (int i = points.size() - 1; i >= 0; --i)
     {
         const QPoint& p = points[i].point();
+        const double sp = sa.at(p.x(), p.y());
+
         QPoint q[8];		// struct ?
         double h[8];
         double s[8];
+        double sn[8];
 
-        int n = check_flow_slope(p, q, h, s);
+        int n = check_flow_slope(p, q, h, s, sn);
         if (n == 0)
             continue;
 
         double ss = s[0];
         int k = 0;
-        for (int j = 1; j < n; ++j) {
+        double checksum = 0.0;
+        for (int j = 0; j < n; ++j) {
+            checksum += sn[j];
+            sa.at(q[j].x(), q[j].y()) += sp/sn[j];
             if (s[j] > ss)
             {
                 ss = s[j];
                 k = j;
             }
         }
-        const double sp = sa.at(p.x(), p.y());
-        sa.at(q[k].x(), q[k].y()) += sp;
+        assert(abs(checksum - 1.0) < eps);
+
+//        sa.at(q[k].x(), q[k].y()) += sp;
     }
 
     return sa;

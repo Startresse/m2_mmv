@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
 //    QImage res = hf.slope_map().save();
 //    QImage res = hf.laplacian_map().save();
-    QImage res = hf.stream_area().save(0.4);
+    QImage res = hf.stream_area().save(0.03);
 
     res.save("../images/res.png");
     return 0;
