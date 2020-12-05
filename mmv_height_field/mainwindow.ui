@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>887</width>
+    <height>528</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Mesh_Computational_Geometry</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="exit_button">
+        <property name="text">
+         <string>exit</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="select_mesh">
+        <item>
+         <property name="text">
+          <string>triangulation</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>franke4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>franke5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>franke6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>cube</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>queen</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="select_color">
+        <item>
+         <property name="text">
+          <string>Random</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Flat</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Laplacian</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="toggle_wireframe">
+        <property name="text">
+         <string>wireframe</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="toggle_voronoi">
+        <property name="text">
+         <string>Voronoi</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="GLDisplayWidget" name="widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GLDisplayWidget</class>
+   <extends>QWidget</extends>
+   <header>gldisplaywidget.h</header>
+   <container>1</container>
+   <slots>
+    <slot>switch()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>exit_button</sender>
+   <signal>released()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>170</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>174</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
