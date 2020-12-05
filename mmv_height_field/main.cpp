@@ -5,6 +5,7 @@
 #include "grid2.h"
 #include "heightfield.h"
 #include "widget.h"
+#include "mainwindow.h"
 
 void unitary_tests(bool verbose = false)
 {
@@ -39,10 +40,16 @@ int main(int argc, char *argv[])
 
     hf.render(3.0).save("../images/render.png");
     res.save("../images/res.png");
-    return 0;
+//    return 0;
 
     QApplication a(argc, argv);
-    Widget w;
+//    Widget w;
+//    w.show();
+    MainWindow w;
     w.show();
+
+
+    std::cout << "OK" << std::endl;
+//    return 0;
     return a.exec();
 }

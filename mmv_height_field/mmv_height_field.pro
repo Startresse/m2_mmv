@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,23 +10,28 @@ CONFIG += c++11
 
 SOURCES += \
     box2.cpp \
+    gldisplaywidget.cpp \
     grid2.cpp \
     heightfield.cpp \
     main.cpp \
+    mainwindow.cpp \
+    mesh.cpp \
     scalarpoint2.cpp \
-    sf2.cpp \
-    widget.cpp
+    sf2.cpp
 
 HEADERS += \
     box2.h \
+    gldisplaywidget.h \
     grid2.h \
     heightfield.h \
+    mainwindow.h \
+    mesh.h \
     scalarpoint2.h \
     sf2.h \
-    widget.h
+    ui_mainwindow.h
 
 FORMS += \
-    widget.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -35,3 +40,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     images/test01.png
+
+LIBS = -lGLU
