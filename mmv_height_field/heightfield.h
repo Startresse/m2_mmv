@@ -16,6 +16,7 @@ protected:
     double high;
 
 public:
+    HeightField() : SF2() {};
     HeightField(const SF2&);
     HeightField(const QImage&, const Box2&, double, double);
 
@@ -40,6 +41,10 @@ public:
     void Shade() const;
 
     QImage render(double contrast = 1.0) const;
+
+    int size_x() const {return nx;}
+    int size_y() const {return ny;}
+    int highest() const {return high;}
 
 };
 

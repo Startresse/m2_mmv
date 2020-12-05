@@ -1,25 +1,21 @@
 #pragma once
 
 #include <QGLWidget>
-#include <QMap>
-#include <cmath>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <queue>
-#include <random>
-#include <sstream>
-#include <stack>
-#include <vector>
-
-
+#include "heightfield.h"
 
 // MESH
 
 class Mesh {
 private:
+    HeightField hf;
+
 public:
-    Mesh() {}
+    Mesh() {
+        QImage image;
+        image.load("images/cham.png");
+        hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
+    }
+
     ~Mesh() {}
     void draw();
 
@@ -32,10 +28,10 @@ private:
     Mesh _mesh;
 
 public :
-    GeometricWorld() {
-    }
+    GeometricWorld() {}
 
-    void draw() {
+    void draw()
+    {
         _mesh.draw();
     }
 

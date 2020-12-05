@@ -23,10 +23,6 @@ void GLDisplayWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
-
-    //** TP : To add....
-    // Construction of the GeometricWorld before it is displayed
-    // It can also be constructed following a signal (button)
 }
 
 void GLDisplayWidget::paintGL(){
@@ -42,10 +38,7 @@ void GLDisplayWidget::paintGL(){
     glTranslated(_X, _Y, _Z);
 
     // Rotation
-    glRotatef(_angle, 1.0f, 1.0f, 0.0f);
-
-    // Color for your _geomWorld
-    glColor3f(0, 1 ,0);
+    glRotatef(_angle_x, 1.0f, 1.0f, 0.0f);
 
     // example with a tetraedre
     _geomWorld.draw();
@@ -73,11 +66,11 @@ void GLDisplayWidget::mousePressEvent(QMouseEvent *event)
 void GLDisplayWidget::mouseMoveEvent(QMouseEvent *event)
 {
     int dx = event->x() - _lastPosMouse.x();
-    // int dy = event->y() - lastPosMouse.y();
+//    int dy = event->y() - _lastPosMouse.y();
 
     if( event != NULL )
     {
-        _angle += dx;
+        _angle_x += dx;
         _lastPosMouse = event->pos();
 
         updateGL();
