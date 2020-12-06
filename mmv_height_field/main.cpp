@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     // main
     QImage image;
-    image.load("images/cham.png");
+    image.load("images/vesuve.png");
 
     HeightField hf(image, Box2(15000, 15000), 0.0, 1200.0);
 //    QImage res = hf.render(3.0);
