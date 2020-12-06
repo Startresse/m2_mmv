@@ -26,6 +26,9 @@ public:
     double at(const QPoint&) const;
     double& at(const QPoint&);
 
+    double min();
+    double max();
+
     QVector2D Gradient(int i, int j) const;
     double laplacian(int i, int j) const;
 

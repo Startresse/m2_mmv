@@ -65,6 +65,22 @@ double SF2::laplacian(int i, int j) const
     return lap;
 }
 
+double SF2::max()
+{
+    double max = at(0, 0);
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            double val = at(i, j);
+            if(val > max)
+                max = val;
+        }
+    }
+    auto smax = std::max_element(field.begin(), field.end());
+    assert(*smax == max);
+
+    return max;
+}
+
 const double eps = 0.00001;
 QImage SF2::save(double contrast) const
 {
