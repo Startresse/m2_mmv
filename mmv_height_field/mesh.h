@@ -33,16 +33,15 @@ class Mesh {
 private:
     HeightField hf;
     std::vector<Triangles> faces;
-    SF2 color_sf;
-    double max_color;
+    QImage render;
 
 public:
     Mesh() {
         QImage image;
         image.load("images/vesuve.png");
         hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
-        color_sf = hf.stream_area();
-        max_color = color_sf.max();
+//        render = hf.stream_area().save(0.5);
+        render = hf.render(3.0);
     }
 
     ~Mesh() {}
