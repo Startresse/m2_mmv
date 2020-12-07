@@ -7,6 +7,8 @@
 
 #include "grid2.h"
 
+constexpr double img_max_value = 255.0;
+
 typedef double height_t ;
 class SF2 : public Grid2
 {

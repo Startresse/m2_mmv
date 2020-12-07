@@ -28,6 +28,9 @@ public:
     }
 };
 
+
+enum render_type {RENDER, STREAM_AREA};
+
 // MESH
 class Mesh {
 private:
@@ -35,18 +38,26 @@ private:
     std::vector<Triangles> faces;
     QImage render;
 
+    SF2 rendersf;
+    double max;
+
 public:
     Mesh() {
+//        QImage image;
+//        image.load("images/vesuve.png");
+//        hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
         QImage image;
-        image.load("images/vesuve.png");
-        hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
-//        render = hf.stream_area().save(0.5);
+        image.load("images/heightmap3.jpeg");
+        hf = HeightField(image, Box2(3000, 3000), 0.0, 1200.0);
         render = hf.render(3.0);
+        rendersf = hf.stream_area();
+        max = rendersf.max();
     }
 
     ~Mesh() {}
 
     void set_up();
+    void change_render(int, double pow = 1.0);
 
     void glTriangle(const Triangles& t);
     void draw();
@@ -69,5 +80,7 @@ public :
     {
         _mesh.draw();
     }
+
+    Mesh& get_mesh() {return _mesh;}
 
 };

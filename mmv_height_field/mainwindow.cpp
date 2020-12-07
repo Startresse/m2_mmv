@@ -12,3 +12,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_comboBox_activated(int index)
+{
+    ui->widget->get_world().get_mesh().change_render(index);
+}

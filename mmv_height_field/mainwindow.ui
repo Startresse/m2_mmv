@@ -24,6 +24,20 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QComboBox" name="comboBox">
+        <item>
+         <property name="text">
+          <string>Render</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stream area</string>
+         </property>
+        </item>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>

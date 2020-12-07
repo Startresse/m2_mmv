@@ -24,20 +24,20 @@ int main(int argc, char *argv[])
     unitary_tests(false);
 
     // main
-    QImage image;
-    image.load("images/vesuve.png");
+//    QImage image;
+//    image.load("images/vesuve.png");
 
-    HeightField hf(image, Box2(15000, 15000), 0.0, 1200.0);
-//    QImage res = hf.render(3.0);
+//    HeightField hf(image, Box2(15000, 15000), 0.0, 1200.0);
+////    QImage res = hf.render(3.0);
 
-//    QImage res = hf.slope_map().save();
-//    QImage res = hf.laplacian_map().save();
-    QImage res = hf.stream_area().save(0.5);
+////    QImage res = hf.slope_map().save();
+////    QImage res = hf.laplacian_map().save();
+//    QImage res = hf.stream_area().save(0.5);
 
 
-    hf.render(3.0).save("images/render.png");
-    res.save("images/res.png");
-//    return 0;
+//    hf.render(3.0).save("images/render.png");
+//    res.save("images/res.png");
+////    return 0;
 
     QApplication a(argc, argv);
     MainWindow w;

@@ -33,12 +33,14 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
+INCLUDEPATH += \
+    /usr/local/include/opencv4
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    images/test01.png
-
-LIBS = -lGLU
+LIBS += \
+    -lGLU \
+    $(shell pkg-config opencv --libs)

@@ -5,6 +5,7 @@
 #include <QImage>
 #include <math.h>
 #include <QRgb>
+#include <opencv2/core.hpp>
 
 #include "scalarpoint2.h"
 #include "sf2.h"
@@ -45,6 +46,7 @@ public:
     int size_x() const {return nx;}
     int size_y() const {return ny;}
     int highest() const {return high;}
+    int lowest() const {return low;}
 
 };
 

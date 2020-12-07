@@ -11,7 +11,7 @@ HeightField::HeightField(const QImage& im, const Box2& b, double low, double hig
     QImage gs = im.convertToFormat(QImage::Format_Grayscale8);
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
-            at(i, j) = (high - low)*qGray(gs.pixel(i, j))/255.0 + low;
+            at(i, j) = (high - low)*qGray(gs.pixel(i, j))/img_max_value + low;
             assert(height(i, j) >= low && height(i, j) <= high);
         }
     }

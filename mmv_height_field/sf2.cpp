@@ -111,7 +111,7 @@ QImage SF2::save(double contrast) const
                 assert(val >= -eps && val <= 1.0 + eps);
 
             val = pow(val, contrast);
-            val *= 255;
+            val *= img_max_value;
             image.setPixel(i, j, qRgb(val, val, val));
         }
     }

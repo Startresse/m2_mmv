@@ -1,7 +1,6 @@
 #include "mesh.h"
 
 constexpr double eps_bottom = -0.001;
-constexpr double img_max_value = 255.0;
 void Mesh::set_up()
 {
     // BOTTOM
@@ -15,7 +14,7 @@ void Mesh::set_up()
 
 
     float length_x = hf.size_x()  / 4;
-    float length_y = hf.highest();
+    float length_y = hf.highest() / 2;
     float length_z = hf.size_y()  / 4;
 
     // FRONT & BACK
@@ -51,7 +50,7 @@ void Mesh::set_up()
         for (int j = 0; j < hf.size_y() - 1; ++j) {
             faces.emplace_back( PointIJ(QVector3D((i    )/length_x - 2, hf.height(i    , j    ) / length_y, -(j    )/length_z + 2), i    , j    ),
                                 PointIJ(QVector3D((i    )/length_x - 2, hf.height(i    , j + 1) / length_y, -(j + 1)/length_z + 2), i    , j + 1),
-                                PointIJ(QVector3D((i + 1)/length_x - 2, hf.height(i + 1, j + 1) / length_y, -(j + 1)/length_z + 2), i + 1, j    ));
+                                PointIJ(QVector3D((i + 1)/length_x - 2, hf.height(i + 1, j + 1) / length_y, -(j + 1)/length_z + 2), i + 1, j + 1));
 
             faces.emplace_back( PointIJ(QVector3D((i    )/length_x - 2, hf.height(i    , j    ) / length_y, -(j    )/length_z + 2), i    , j    ),
                                 PointIJ(QVector3D((i + 1)/length_x - 2, hf.height(i + 1, j    ) / length_y, -(j    )/length_z + 2), i + 1, j    ),
@@ -59,6 +58,23 @@ void Mesh::set_up()
         }
     }
 
+}
+
+
+
+void Mesh::change_render(int index, double pow)
+{
+    render_type r = render_type(index);
+    switch (r) {
+    case RENDER:
+        render = hf.render(3.0);
+        break;
+    case STREAM_AREA:
+        render = hf.stream_area().save(0.5);
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -75,9 +91,10 @@ void Mesh::glTriangle(const Triangles& t)
         const PointIJ& v = t.vertices[i];
         if (hf.inside(v.i, v.j)) {
             double color = qGray(render.pixel(v.i, v.j))/img_max_value;
+//            double color = rendersf.at(v.i, v.j)/max;
             glColor3d(color, color, color);
         } else {
-            glColor3d(.8, .8, .8);
+            glColor3d(0, 0, 0);
         }
         glPoint(v);
     }
