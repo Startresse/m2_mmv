@@ -32,15 +32,15 @@ void GLDisplayWidget::paintGL(){
     // Center the camera
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0,0,5,  0,0,0,   0,1,0); //gluLookAt(eye, center, up)  //deprecated
-                                       // Returns a 4x4 matrix that transforms world coordinates to eye coordinates.
-    // Translation
-    glTranslated(_X, _Y, _Z);
+    gluLookAt(0, 0, distance,
+              0, 0, 0,
+              0, 1, 0);
 
-    // Rotation
-    glRotatef(_angle_x, 1.0f, 1.0f, 0.0f);
+    // transform
+    glRotatef(x_rot / 36.0f, 1.0f , 0.0f, 0.0f );
+    glRotatef(y_rot / 36.0f, 0.0f , 1.0f, 0.0f );
+    glRotatef(z_rot / 36.0f, 0.0f , 0.0f, 1.0f );
 
-    // example with a tetraedre
     _geomWorld.draw();
 }
 
@@ -66,23 +66,25 @@ void GLDisplayWidget::mousePressEvent(QMouseEvent *event)
 void GLDisplayWidget::mouseMoveEvent(QMouseEvent *event)
 {
     int dx = event->x() - _lastPosMouse.x();
-//    int dy = event->y() - _lastPosMouse.y();
+    int dy = event->y() - _lastPosMouse.y();
 
     if( event != NULL )
     {
-        _angle_x += dx;
-        _lastPosMouse = event->pos();
+        rotateBy(dy*8.0, 0     , 0);
+        rotateBy(0     , dx*8.0, 0);
 
         updateGL();
     }
+    _lastPosMouse = event->pos();
 }
 
 // Mouse Management for the zoom
 void GLDisplayWidget::wheelEvent(QWheelEvent *event) {
-    QPoint numDegrees = event->angleDelta();
-    double stepZoom = 0.25;
-    if (!numDegrees.isNull())
-    {
-      _Z = (numDegrees.x() > 0 || numDegrees.y() > 0) ? _Z + stepZoom : _Z - stepZoom;
-    }
+    distance *= 1.0 + (-1.0 * event->delta() / 12000.0);
+}
+void GLDisplayWidget::rotateBy(float x, float y, float z)
+{
+    x_rot += x;
+    y_rot += y;
+    z_rot += z;
 }

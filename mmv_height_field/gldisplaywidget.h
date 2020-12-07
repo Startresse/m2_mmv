@@ -26,12 +26,13 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
+    void rotateBy(float x, float y, float z);
 
 private:
 
     QTimer _timer; // To update the scene
-    float _X = 0, _Y = 0 ,_Z = 0; // Translation
-    float _angle_x = 0; // Rotation
+    float distance = 5.0;
+    float x_rot = 0, y_rot = 0, z_rot = 0;
 
     QPoint _lastPosMouse; // To keep the last position of the mouse
 
