@@ -3,7 +3,11 @@
 constexpr double eps_bottom = -0.001;
 void Mesh::set_up()
 {
+    faces.clear();
+
+#define CLOSED
     // BOTTOM
+#ifdef CLOSED
     faces.emplace_back(QVector3D(-2, eps_bottom, -2),
                        QVector3D(-2, eps_bottom,  2),
                        QVector3D( 2, eps_bottom,  2));
@@ -11,12 +15,14 @@ void Mesh::set_up()
     faces.emplace_back(QVector3D(-2, eps_bottom, -2),
                        QVector3D( 2, eps_bottom, -2),
                        QVector3D( 2, eps_bottom,  2));
+#endif
 
 
     float length_x = hf.size_x()  / 4;
     float length_y = hf.highest() / 2;
     float length_z = hf.size_y()  / 4;
 
+#ifdef CLOSED
     // FRONT & BACK
     std::vector<int> borders = {0, hf.size_y() - 1};
     for (int j : borders) {
@@ -44,6 +50,7 @@ void Mesh::set_up()
                                         QVector3D(j/length_x - 2, eps_bottom                    , -(i + 1)/length_z + 2)           );
         }
     }
+#endif
 
     // HF
     for (int i = 0; i < hf.size_x() - 1; ++i) {
@@ -71,6 +78,12 @@ void Mesh::change_render(int index, double pow)
         break;
     case STREAM_AREA:
         render = hf.stream_area().save(0.5);
+        break;
+    case LAPLACIAN:
+        render = hf.laplacian_map().save(2.0);
+        break;
+    case SLOPE:
+        render = hf.slope_map().save(2.0);
         break;
     default:
         break;

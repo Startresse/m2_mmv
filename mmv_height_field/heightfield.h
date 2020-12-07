@@ -10,6 +10,10 @@
 #include "scalarpoint2.h"
 #include "sf2.h"
 
+#include "opencv2/core.hpp"
+#include "opencv2/highgui.hpp"
+
+
 class HeightField : public SF2
 {
 protected:
@@ -19,7 +23,7 @@ protected:
 public:
     HeightField() : SF2() {};
     HeightField(const SF2&);
-    HeightField(const QImage&, const Box2&, double, double);
+    HeightField(const cv::Mat&, const Box2&, double, double);
 
     double height(int i, int j) const;
     double slope(int i, int j) const;

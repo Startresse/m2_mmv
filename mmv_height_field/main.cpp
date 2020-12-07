@@ -6,6 +6,8 @@
 #include "heightfield.h"
 #include "mainwindow.h"
 
+#include "opencv2/core.hpp"
+
 void unitary_tests(bool verbose = false)
 {
     if (verbose)
@@ -38,6 +40,7 @@ int main(int argc, char *argv[])
 //    hf.render(3.0).save("images/render.png");
 //    res.save("images/res.png");
 ////    return 0;
+//    cv::Mat mat;
 
     QApplication a(argc, argv);
     MainWindow w;

@@ -29,7 +29,13 @@ public:
 };
 
 
-enum render_type {RENDER, STREAM_AREA};
+enum render_type {
+    RENDER,
+    STREAM_AREA,
+    LAPLACIAN,
+    SLOPE,
+
+};
 
 // MESH
 class Mesh {
@@ -43,12 +49,11 @@ private:
 
 public:
     Mesh() {
-//        QImage image;
-//        image.load("images/vesuve.png");
+//        cv::Mat image = cv::imread("images/vesuve.png", cv::IMREAD_GRAYSCALE);
 //        hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
-        QImage image;
-        image.load("images/heightmap3.jpeg");
-        hf = HeightField(image, Box2(3000, 3000), 0.0, 1200.0);
+        cv::Mat image = cv::imread("images/heightmap3.jpeg", cv::IMREAD_GRAYSCALE);
+        hf = HeightField(image, Box2(2000, 2000), 0.0, 1200.0);
+        hf.soften(1); // TODO in interface
         render = hf.render(3.0);
         rendersf = hf.stream_area();
         max = rendersf.max();

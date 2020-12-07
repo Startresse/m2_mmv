@@ -22,6 +22,7 @@ public:
     SF2();
     SF2(const Grid2& g);
     SF2(const Grid2& g, double);
+    SF2(const SF2&);
 
     double at(int i, int j) const;
     double& at(int i, int j);
@@ -33,6 +34,8 @@ public:
 
     QVector2D Gradient(int i, int j) const;
     double laplacian(int i, int j) const;
+
+    void soften(int n = 1);
 
     QImage save(double contrast = 1.0) const;
 };

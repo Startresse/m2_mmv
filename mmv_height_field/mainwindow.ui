@@ -36,6 +36,16 @@
           <string>Stream area</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Laplacian</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Slope</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>

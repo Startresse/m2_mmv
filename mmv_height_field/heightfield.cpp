@@ -5,14 +5,21 @@ HeightField::HeightField(const SF2& s) : SF2(s)
 
 }
 
-HeightField::HeightField(const QImage& im, const Box2& b, double low, double high)
-    : SF2(Grid2(b, im.width(), im.height())), low(low), high(high)
+HeightField::HeightField(const cv::Mat& im, const Box2& b, double low, double high)
+    : SF2(Grid2(b, im.rows, im.cols)), low(low), high(high)
 {
-    QImage gs = im.convertToFormat(QImage::Format_Grayscale8);
+//    QImage gs = im.convertToFormat(QImage::Format_Grayscale8);
+//    for (int i = 0; i < nx; ++i) {
+//        for (int j = 0; j < ny; ++j) {
+//            at(i, j) = (high - low)*qGray(gs.pixel(i, j))/img_max_value + low;
+//            assert(height(i, j) >= low && height(i, j) <= high);
+//        }
+//    }
+
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
-            at(i, j) = (high - low)*qGray(gs.pixel(i, j))/img_max_value + low;
-            assert(height(i, j) >= low && height(i, j) <= high);
+            at(i, j) = (high - low)*im.at<uchar>(i, j)/img_max_value + low;
+            assert(at(i, j) >= low && at(i, j) <= high);
         }
     }
 }

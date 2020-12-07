@@ -9,6 +9,15 @@ SF2::SF2(const Grid2& g, double val) : Grid2(g)
     field.resize(nx * ny, val);
 }
 
+SF2::SF2(const SF2& sf) : SF2(static_cast<Grid2>(sf))
+{
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            at(i, j) = sf.at(i, j);
+        }
+    }
+}
+
 double SF2::at(int i, int j) const
 {
     return field[index(i, j)];
@@ -118,3 +127,22 @@ QImage SF2::save(double contrast) const
 
     return image;
 }
+
+void SF2::soften(int n)
+{
+    SF2 res = SF2(*this);
+    for (int i = n; i < nx - n; ++i) {
+        for (int j = n; j < ny - n; ++j) {
+            double sum = 0;
+            for (int k = -n; k <= n; ++k) {
+                for (int l = -n; l <= n; ++l)
+                    sum += res.at(i + k, j + l);
+            }
+            at(i, j) = sum / ((2*n + 1) * (2*n + 1));
+
+        }
+    }
+
+}
+
+

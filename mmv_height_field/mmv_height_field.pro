@@ -43,4 +43,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 LIBS += \
     -lGLU \
-    $(shell pkg-config opencv --libs)
+    -L/usr/local/lib -L/home/mike/opencv-4.0.1/build -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_shape -lopencv_videoio -lopencv_calib3d -lopencv_face
