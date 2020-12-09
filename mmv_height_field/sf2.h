@@ -26,13 +26,10 @@ public:
     double at(const QPoint&) const;
     double& at(const QPoint&);
 
-    double min();
-    double max();
-
     QVector2D Gradient(int i, int j) const;
     double laplacian(int i, int j) const;
 
-    void soften(int n = 1);
+    void median(int n = 1);
     void blur(int n = 1);
 
     QImage save(double contrast = 1.0) const;

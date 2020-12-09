@@ -46,6 +46,7 @@ enum images {
 };
 
 // MESH
+// TODO : inherit form hf ?
 class Mesh {
 private:
     std::vector<Triangles> faces;

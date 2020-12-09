@@ -82,7 +82,7 @@ void Mesh::blur()
     if (blur_no_median)
         hf.blur(blur_strength);
     else
-        hf.soften(blur_strength);
+        hf.median(blur_strength);
 }
 
 void Mesh::update_blur_type(bool b)

@@ -74,38 +74,15 @@ double SF2::laplacian(int i, int j) const
     return lap;
 }
 
-double SF2::max()
-{
-    double max = at(0, 0);
-    for (int i = 0; i < nx; ++i) {
-        for (int j = 0; j < ny; ++j) {
-            double val = at(i, j);
-            if(val > max)
-                max = val;
-        }
-    }
-    auto smax = std::max_element(field.begin(), field.end());
-    assert(*smax == max);
-
-    return max;
-}
-
 const double eps = 0.00001;
+// TODO divergente palette
 QImage SF2::save(double contrast) const
 {
     QImage image(nx, ny, QImage::Format_ARGB32);
 
-    double max = at(0, 0);
-    double min = at(0, 0);
-    for (int i = 0; i < nx; ++i) {
-        for (int j = 0; j < ny; ++j) {
-            double val = at(i, j);
-            if(val > max)
-                max = val;
-            if(val < min)
-                min = val;
-        }
-    }
+    auto [minp, maxp] = std::minmax_element(begin(field), end(field));
+    height_t min = *minp;
+    height_t max = *maxp;
 
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
@@ -128,23 +105,10 @@ QImage SF2::save(double contrast) const
     return image;
 }
 
-void SF2::soften(int n)
-{
-    SF2 res = SF2(*this);
-    for (int i = n; i < nx - n; ++i) {
-        for (int j = n; j < ny - n; ++j) {
-            double sum = 0;
-            for (int k = -n; k <= n; ++k) {
-                for (int l = -n; l <= n; ++l)
-                    sum += res.at(i + k, j + l);
-            }
-            at(i, j) = sum / ((2*n + 1) * (2*n + 1));
+const double gauss3_fact = 1.0/16.0;
+const int gauss3[3][3] = {{1, 2, 1},{2, 4, 2},{1, 2, 1}};
 
-        }
-    }
-}
-
-const int gauss3[3][3] = {{1, 2, 1},{2, 4, 4},{1, 2, 1}};
+const double gauss5_fact = 1.0/256.0;
 const int gauss5[5][5] = {
     {1,  4,  6,  4, 1},
     {4, 16, 24, 16, 4},
@@ -156,7 +120,7 @@ const int gauss5[5][5] = {
 void SF2::blur(int n)
 {
     if (n < 1)
-        n = 1;
+        return;
     if (n > 2)
         n = 2;
 
@@ -173,9 +137,30 @@ void SF2::blur(int n)
                 }
             }
             if (n == 1)
-                at(i, j) = sum / 16;
+                at(i, j) = sum * gauss3_fact;
             else
-                at(i, j) = sum / 256;
+                at(i, j) = sum * gauss5_fact;
+
+        }
+    }
+}
+
+void SF2::median(int n)
+{
+    if (n <= 0)
+        return;
+
+    SF2 res = SF2(*this);
+    for (int i = n; i < nx - n; ++i) {
+        for (int j = n; j < ny - n; ++j) {
+
+            double sum = 0;
+            for (int k = -n; k <= n; ++k) {
+                for (int l = -n; l <= n; ++l) {
+                    sum += res.at(i + k, j + l);
+                }
+            }
+            at(i, j) = sum / ((2*n + 1) * (2*n + 1));
 
         }
     }
