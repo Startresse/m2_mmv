@@ -3,7 +3,7 @@
 
 #include "box2.h"
 
-class Grid2 : public Box2
+class Grid2 : protected Box2
 {
 protected:
     int nx;

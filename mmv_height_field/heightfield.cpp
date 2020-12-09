@@ -1,21 +1,8 @@
 #include "heightfield.h"
 
-HeightField::HeightField(const SF2& s) : SF2(s)
-{
-
-}
-
 HeightField::HeightField(const cv::Mat& im, const Box2& b, double low, double high)
     : SF2(Grid2(b, im.rows, im.cols)), low(low), high(high)
 {
-//    QImage gs = im.convertToFormat(QImage::Format_Grayscale8);
-//    for (int i = 0; i < nx; ++i) {
-//        for (int j = 0; j < ny; ++j) {
-//            at(i, j) = (high - low)*qGray(gs.pixel(i, j))/img_max_value + low;
-//            assert(height(i, j) >= low && height(i, j) <= high);
-//        }
-//    }
-
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
             at(i, j) = (high - low)*im.at<uchar>(i, j)/img_max_value + low;
@@ -24,6 +11,11 @@ HeightField::HeightField(const cv::Mat& im, const Box2& b, double low, double hi
     }
 }
 
+HeightField::HeightField(const HeightField& hf) : SF2(static_cast<SF2>(hf))
+{
+    low = hf.low;
+    high = hf.high;
+}
 
 double HeightField::height(int i, int j) const
 {

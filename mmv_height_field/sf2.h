@@ -15,9 +15,6 @@ class SF2 : public Grid2
 protected:
     std::vector<height_t> field;
 
-//    height_t min = inf;
-//    height_t max = -inf;
-
 public:
     SF2();
     SF2(const Grid2& g);

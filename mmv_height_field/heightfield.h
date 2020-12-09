@@ -22,8 +22,8 @@ protected:
 
 public:
     HeightField() : SF2() {};
-    HeightField(const SF2&);
     HeightField(const cv::Mat&, const Box2&, double, double);
+    HeightField(const HeightField&);
 
     double height(int i, int j) const;
     double slope(int i, int j) const;
