@@ -155,7 +155,11 @@ const int gauss5[5][5] = {
 
 void SF2::blur(int n)
 {
-    assert(n == 1 || n == 2);
+    if (n < 1)
+        n = 1;
+    if (n > 2)
+        n = 2;
+
     SF2 res = SF2(*this);
     for (int i = n; i < nx - n; ++i) {
         for (int j = n; j < ny - n; ++j) {

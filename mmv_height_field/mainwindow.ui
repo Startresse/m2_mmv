@@ -18,35 +18,116 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QPushButton" name="exit_button">
-        <property name="text">
-         <string>exit</string>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="exit_button">
+          <property name="text">
+           <string>exit</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QComboBox" name="comboBox_2">
+          <item>
+           <property name="text">
+            <string>Spykes</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Cham</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Mont Blanc</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Vesuve</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Volc</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
-        <item>
-         <property name="text">
-          <string>Render</string>
-         </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="0">
+         <widget class="QSpinBox" name="spinBox">
+          <property name="maximum">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
-        <item>
-         <property name="text">
-          <string>Stream area</string>
-         </property>
+        <item row="0" column="0">
+         <widget class="QComboBox" name="comboBox_3">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Median</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Gaussian</string>
+           </property>
+          </item>
+         </widget>
         </item>
-        <item>
-         <property name="text">
-          <string>Laplacian</string>
-         </property>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="1" column="0">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox">
+          <property name="maximum">
+           <double>3.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>3.000000000000000</double>
+          </property>
+         </widget>
         </item>
-        <item>
-         <property name="text">
-          <string>Slope</string>
-         </property>
+        <item row="0" column="0">
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>Render</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Stream area</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Laplacian</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Slope</string>
+           </property>
+          </item>
+         </widget>
         </item>
-       </widget>
+       </layout>
       </item>
      </layout>
     </item>

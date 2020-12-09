@@ -18,6 +18,14 @@ public:
 private slots:
     void on_comboBox_activated(int index);
 
+    void on_doubleSpinBox_valueChanged(double arg1);
+
+    void on_comboBox_2_activated(int index);
+
+    void on_spinBox_valueChanged(int arg1);
+
+    void on_comboBox_3_activated(int index);
+
 private:
     Ui::MainWindow *ui;
 };

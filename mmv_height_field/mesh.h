@@ -37,28 +37,56 @@ enum render_type {
 
 };
 
+enum images {
+    SPYKES,
+    CHAM,
+    MB,
+    VESUVE,
+    VOLC,
+};
+
 // MESH
 class Mesh {
 private:
-    HeightField hf;
     std::vector<Triangles> faces;
-    QImage render;
+
+    HeightField hf;
+    QImage render_img;
+
+    bool closed = true;
+
+    QString image_name = "images/heightmap3.jpeg";
+    double length_x = 2000;
+    double length_y = 2000;
+    double low = 0;
+    double high = 1200;
+
+    render_type render_t = RENDER;
+    double render_power = 3.0;
+
+    int blur_strength = 1.0;
+    bool blur_no_median = true;
 
 public:
     Mesh() {
-//        cv::Mat image = cv::imread("images/vesuve.png", cv::IMREAD_GRAYSCALE);
-//        hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
-        cv::Mat image = cv::imread("images/heightmap3.jpeg", cv::IMREAD_GRAYSCALE);
-        hf = HeightField(image, Box2(2000, 2000), 0.0, 1200.0);
-        hf.blur(2); // TODO in interface
-//        hf.soften(1); // TODO in interface
-        render = hf.render(3.0);
+        load();
     }
 
     ~Mesh() {}
 
+
+    void load();
     void set_up();
-    void change_render(int, double pow = 1.0);
+
+    void update_file(int);
+
+    void blur();
+    void update_blur_strength(int);
+    void update_blur_type(bool);
+
+    void render();
+    void update_render_type(int);
+    void update_render_power(double);
 
     void glTriangle(const Triangles& t);
     void draw();
@@ -72,10 +100,7 @@ private:
     Mesh _mesh;
 
 public :
-    GeometricWorld()
-    {
-        _mesh.set_up();
-    }
+    GeometricWorld() {}
 
     void draw()
     {

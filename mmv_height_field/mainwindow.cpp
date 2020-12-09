@@ -15,5 +15,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_comboBox_activated(int index)
 {
-    ui->widget->get_world().get_mesh().change_render(index);
+    ui->widget->get_world().get_mesh().update_render_type(index);
+}
+
+void MainWindow::on_doubleSpinBox_valueChanged(double arg1)
+{
+    ui->widget->get_world().get_mesh().update_render_power(arg1);
+}
+
+void MainWindow::on_comboBox_2_activated(int index)
+{
+   ui->widget->get_world().get_mesh().update_file(index);
+}
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+   ui->widget->get_world().get_mesh().update_blur_strength(arg1);
+}
+
+void MainWindow::on_comboBox_3_activated(int index)
+{
+    ui->widget->get_world().get_mesh().update_blur_type(index);
 }
