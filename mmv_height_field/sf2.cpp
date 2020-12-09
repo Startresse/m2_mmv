@@ -142,7 +142,39 @@ void SF2::soften(int n)
 
         }
     }
+}
 
+const int gauss3[3][3] = {{1, 2, 1},{2, 4, 4},{1, 2, 1}};
+const int gauss5[5][5] = {
+    {1,  4,  6,  4, 1},
+    {4, 16, 24, 16, 4},
+    {6, 24, 36, 24, 6},
+    {4, 16, 24, 16, 4},
+    {1,  4,  6,  4, 1}
+};
+
+void SF2::blur(int n)
+{
+    assert(n == 1 || n == 2);
+    SF2 res = SF2(*this);
+    for (int i = n; i < nx - n; ++i) {
+        for (int j = n; j < ny - n; ++j) {
+            double sum = 0;
+            for (int k = -n; k <= n; ++k) {
+                for (int l = -n; l <= n; ++l) {
+                    if (n == 1)
+                        sum += res.at(i + k, j + l)*gauss3[k + n][l + n];
+                    else
+                        sum += res.at(i + k, j + l)*gauss5[k + n][l + n];
+                }
+            }
+            if (n == 1)
+                at(i, j) = sum / 16;
+            else
+                at(i, j) = sum / 256;
+
+        }
+    }
 }
 
 

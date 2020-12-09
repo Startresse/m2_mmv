@@ -36,6 +36,7 @@ public:
     double laplacian(int i, int j) const;
 
     void soften(int n = 1);
+    void blur(int n = 1);
 
     QImage save(double contrast = 1.0) const;
 };

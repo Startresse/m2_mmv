@@ -44,19 +44,15 @@ private:
     std::vector<Triangles> faces;
     QImage render;
 
-    SF2 rendersf;
-    double max;
-
 public:
     Mesh() {
 //        cv::Mat image = cv::imread("images/vesuve.png", cv::IMREAD_GRAYSCALE);
 //        hf = HeightField(image, Box2(15000, 15000), 0.0, 1200.0);
         cv::Mat image = cv::imread("images/heightmap3.jpeg", cv::IMREAD_GRAYSCALE);
         hf = HeightField(image, Box2(2000, 2000), 0.0, 1200.0);
-        hf.soften(1); // TODO in interface
+        hf.blur(2); // TODO in interface
+//        hf.soften(1); // TODO in interface
         render = hf.render(3.0);
-        rendersf = hf.stream_area();
-        max = rendersf.max();
     }
 
     ~Mesh() {}
