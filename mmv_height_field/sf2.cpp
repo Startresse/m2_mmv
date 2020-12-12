@@ -84,6 +84,29 @@ void SF2::clamp(double min, double max)
     }
 }
 
+SF2 SF2::normalize(bool& positive) const
+{
+    SF2 ret(*this);
+
+    auto [minp, maxp] = std::minmax_element(begin(field), end(field));
+    height_t min = *minp;
+    height_t max = *maxp;
+
+    assert(max > 0);
+    positive = min >= 0.0;
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            if (positive) {
+                ret.at(i, j) = (at(i, j) - min)/(max - min);
+            } else {
+                ret.at(i, j) = (at(i, j) / (std::max(max, -min)));
+            }
+        }
+    }
+
+    return ret;
+}
+
 
 const double eps = 0.00001;
 // TODO divergente palette
@@ -91,25 +114,32 @@ QImage SF2::save(double contrast) const
 {
     QImage image(nx, ny, QImage::Format_ARGB32);
 
-    auto [minp, maxp] = std::minmax_element(begin(field), end(field));
-    height_t min = *minp;
-    height_t max = *maxp;
+    bool positive;
+    SF2 sf_norm = normalize(positive);
 
     for (int i = 0; i < nx; ++i) {
         for (int j = 0; j < ny; ++j) {
-            if (abs(min - max) <= eps) {
-                image.setPixel(i, j, qRgb(125, 125, 125));
-                continue;
+            float val = sf_norm.at(i, j);
+
+            assert(val >= positive ? - eps : -1 - eps && val <= 1.0 + eps);
+
+            if (val > 0)
+                val = pow(val, contrast);
+            else
+                val = -pow(-val, contrast);
+
+            QRgb color;
+            if (positive) {
+                double nv = img_max_value * val;
+                color = qRgb(nv, nv, nv);
+            } else {
+                double def = img_max_value;
+                if (val > 0)
+                    color = qRgb(def, (1 - val) * def, (1 - val) * def);
+                else
+                    color = qRgb((1 + val) * def, (1 + val) * def, def);
             }
-            float val = at(i, j);
-            val = (val - min)/(max - min);
-
-            if (contrast != 1.0)
-                assert(val >= -eps && val <= 1.0 + eps);
-
-            val = pow(val, contrast);
-            val *= img_max_value;
-            image.setPixel(i, j, qRgb(val, val, val));
+            image.setPixel(i, j, color);
         }
     }
 

@@ -33,6 +33,7 @@ public:
     void blur(int n = 1);
 
     void clamp(double min, double max);
+    SF2 normalize(bool& positive) const;
 
     QImage save(double contrast = 1.0) const;
 };

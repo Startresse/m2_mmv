@@ -197,9 +197,11 @@ void Mesh::glTriangle(const Triangles& t)
     for (int i = 0; i < 3; ++i) {
         const PointIJ& v = t.vertices[i];
         if (hf.inside(v.i, v.j)) {
-            double color = qGray(render_img.pixel(v.i, v.j))/img_max_value;
-//            double color = rendersf.at(v.i, v.j)/max;
-            glColor3d(color, color, color);
+            QRgb color = render_img.pixel(v.i, v.j);
+            double red = qRed(color) / img_max_value;
+            double green = qGreen(color) / img_max_value;
+            double blue = qBlue(color) / img_max_value;
+            glColor3d(red, green, blue);
         } else {
             glColor3d(0, 0, 0);
         }
