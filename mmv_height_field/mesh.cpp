@@ -124,6 +124,15 @@ void Mesh::render()
     case SLOPE:
         render_img = hf.slope_map().save(render_power);
         break;
+    case AVG_SLOPE:
+        render_img = hf.avg_slope_map().save(render_power);
+        break;
+    case STREAM_POWER:
+        render_img = hf.stream_power().save(render_power);
+        break;
+    case WETNESS:
+        render_img = hf.wetness_index().save(render_power);
+        break;
     default:
         break;
     }

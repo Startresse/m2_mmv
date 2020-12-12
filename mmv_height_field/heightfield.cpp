@@ -1,5 +1,8 @@
 #include "heightfield.h"
 
+
+/* CONSTRUCTORS */
+
 HeightField::HeightField(const cv::Mat& im, const Box2& b, double low, double high)
     : SF2(Grid2(b, im.rows, im.cols)), low(low), high(high)
 {
@@ -16,6 +19,9 @@ HeightField::HeightField(const HeightField& hf) : SF2(static_cast<SF2>(hf))
     low = hf.low;
     high = hf.high;
 }
+
+
+/* PROPERTIES */
 
 double HeightField::height(int i, int j) const
 {
@@ -59,6 +65,9 @@ QVector3D HeightField::normal(int i, int j) const
     return QVector3D(-grad.x(), -grad.y(), 1.0).normalized();
 }
 
+
+/* MAPS */
+
 SF2 HeightField::slope_map() const
 {
     SF2 sm(Grid2(*this));
@@ -72,6 +81,18 @@ SF2 HeightField::slope_map() const
     return sm;
 }
 
+SF2 HeightField::avg_slope_map() const
+{
+    SF2 sm(Grid2(*this));
+
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            sm.at(i, j) = average_slope(i, j);
+        }
+    }
+
+    return sm;
+}
 
 SF2 HeightField::laplacian_map() const
 {
@@ -86,6 +107,37 @@ SF2 HeightField::laplacian_map() const
     return lm;
 }
 
+SF2 HeightField::stream_power() const
+{
+    SF2 stream = stream_area();
+    SF2 slope = slope_map();
+    SF2 res(Grid2(*this));
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            res.at(i, j) = sqrt(stream.at(i, j)) * slope.at(i, j);
+        }
+    }
+    return res;
+}
+
+SF2 HeightField::wetness_index() const
+{
+    SF2 stream = stream_area();
+    SF2 slope = slope_map();
+    SF2 res(Grid2(*this));
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            res.at(i, j) = log(stream.at(i, j)) / (slope.at(i, j) + 0.000001);
+        }
+    }
+    int mean = std::accumulate(field.begin(), field.end(), 0.0) / field.size();
+    res.clamp(0.0, mean/10.0f);
+    return res;
+}
+
+/* STREAM AREA */
+
+const double eps = 0.00001;
 
 std::vector<ScalarPoint2> HeightField::get_scalar_points() const
 {
@@ -101,9 +153,6 @@ std::vector<ScalarPoint2> HeightField::get_scalar_points() const
 
 }
 
-
-
-const double eps = 0.00001;
 int HeightField::check_flow_slope(const QPoint& p, FlowTiles* ft) const
 {
     static const double inv_sqrt_2 = 1.0/sqrt(2.0);
@@ -149,8 +198,6 @@ int HeightField::check_flow_slope(const QPoint& p, FlowTiles* ft) const
     return n;
 }
 
-
-// steepest
 SF2 HeightField::stream_area() const
 {
     std::vector<ScalarPoint2> points = get_scalar_points();
@@ -185,7 +232,7 @@ SF2 HeightField::stream_area() const
 }
 
 
-
+/* EXPORT */
 
 QImage HeightField::render(double contrast) const
 {

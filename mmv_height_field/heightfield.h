@@ -25,6 +25,7 @@ public:
     HeightField(const cv::Mat&, const Box2&, double, double);
     HeightField(const HeightField&);
 
+    // properties
     double height(int i, int j) const;
     double slope(int i, int j) const;
     double average_slope(int i, int j) const;
@@ -32,6 +33,7 @@ public:
     QVector3D vertex(int i, int j) const;
     QVector3D normal(int i, int j) const;
 
+    // stream area
     struct FlowTiles {
         QPoint q[8];
         double sn[8];
@@ -39,14 +41,19 @@ public:
     std::vector<ScalarPoint2> get_scalar_points() const;
     int check_flow_slope(const QPoint&, FlowTiles*) const;
 
+
+    // maps
     SF2 slope_map() const;
+    SF2 avg_slope_map() const;
     SF2 laplacian_map() const;
     SF2 stream_area() const;
+    SF2 stream_power() const;
+    SF2 wetness_index() const;
 
-    void Shade() const;
-
+    // export
     QImage render(double contrast = 1.0) const;
 
+    // getter
     int size_x() const {return nx;}
     int size_y() const {return ny;}
     int highest() const {return high;}

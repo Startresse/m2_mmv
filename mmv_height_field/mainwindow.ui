@@ -19,13 +19,6 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="exit_button">
-          <property name="text">
-           <string>exit</string>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0">
          <widget class="QComboBox" name="comboBox_2">
           <item>
@@ -53,6 +46,13 @@
             <string>Volc</string>
            </property>
           </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="exit_button">
+          <property name="text">
+           <string>exit</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -117,12 +117,27 @@
           </item>
           <item>
            <property name="text">
+            <string>Stream power</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Laplacian</string>
            </property>
           </item>
           <item>
            <property name="text">
             <string>Slope</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Average slope</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Wetness</string>
            </property>
           </item>
          </widget>

@@ -32,8 +32,11 @@ public:
 enum render_type {
     RENDER,
     STREAM_AREA,
+    STREAM_POWER,
     LAPLACIAN,
     SLOPE,
+    AVG_SLOPE,
+    WETNESS,
 
 };
 

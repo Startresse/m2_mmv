@@ -74,6 +74,17 @@ double SF2::laplacian(int i, int j) const
     return lap;
 }
 
+
+void SF2::clamp(double min, double max)
+{
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            at(i, j) = std::min(std::max(min, at(i, j)), max);
+        }
+    }
+}
+
+
 const double eps = 0.00001;
 // TODO divergente palette
 QImage SF2::save(double contrast) const

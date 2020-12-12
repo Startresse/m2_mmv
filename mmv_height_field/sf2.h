@@ -32,6 +32,8 @@ public:
     void median(int n = 1);
     void blur(int n = 1);
 
+    void clamp(double min, double max);
+
     QImage save(double contrast = 1.0) const;
 };
 
