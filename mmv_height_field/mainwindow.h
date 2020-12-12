@@ -26,6 +26,8 @@ private slots:
 
     void on_comboBox_3_activated(int index);
 
+    void on_doubleSpinBox_2_valueChanged(double arg1);
+
 private:
     Ui::MainWindow *ui;
 };

@@ -37,3 +37,8 @@ void MainWindow::on_comboBox_3_activated(int index)
 {
     ui->widget->get_world().get_mesh().update_blur_type(index);
 }
+
+void MainWindow::on_doubleSpinBox_2_valueChanged(double arg1)
+{
+   ui->widget->get_world().get_mesh().update_blend(arg1);
+}

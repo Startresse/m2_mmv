@@ -56,8 +56,12 @@ private:
 
     HeightField hf;
     QImage render_img;
+    QImage render_tex;
+    QImage shading;
+    bool shading_done = false;
+    double blend_fact = 0.9;
 
-    bool closed = true;
+    bool closed = false;
 
     QString image_name = "images/heightmap3.jpeg";
     double length_x = 2000;
@@ -91,6 +95,9 @@ public:
     void render();
     void update_render_type(int);
     void update_render_power(double);
+
+    void update_tex_blend();
+    void update_blend(double t);
 
     void glTriangle(const Triangles& t);
     void draw();

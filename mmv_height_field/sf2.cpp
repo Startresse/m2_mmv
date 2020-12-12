@@ -108,6 +108,7 @@ SF2 SF2::normalize(bool& positive) const
 }
 
 
+
 const double eps = 0.00001;
 // TODO divergente palette
 QImage SF2::save(double contrast) const
@@ -131,7 +132,7 @@ QImage SF2::save(double contrast) const
             QRgb color;
             if (positive) {
                 double nv = img_max_value * val;
-                color = qRgb(nv, nv, nv);
+                color = qRgb(nv, 0, 0);
             } else {
                 double def = img_max_value;
                 if (val > 0)

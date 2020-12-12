@@ -111,30 +111,60 @@ void Mesh::update_render_power(double pow)
 
 void Mesh::render()
 {
+    if (!shading_done) {
+        shading_done = true;
+        shading = hf.render(2.0);
+    }
+    SF2 render_tmp;
     switch (render_t) {
     case RENDER:
         render_img = hf.render(render_power);
-        break;
+        return;
     case STREAM_AREA:
-        render_img = hf.stream_area().save(render_power);
+        render_tmp = hf.stream_area();
         break;
     case LAPLACIAN:
-        render_img = hf.laplacian_map().save(render_power);
+        render_tmp = hf.laplacian_map();
         break;
     case SLOPE:
-        render_img = hf.slope_map().save(render_power);
+        render_tmp = hf.slope_map();
         break;
     case AVG_SLOPE:
-        render_img = hf.avg_slope_map().save(render_power);
+        render_tmp = hf.avg_slope_map();
         break;
     case STREAM_POWER:
-        render_img = hf.stream_power().save(render_power);
+        render_tmp = hf.stream_power();
         break;
     case WETNESS:
-        render_img = hf.wetness_index().save(render_power);
+        render_tmp = hf.wetness_index();
         break;
     default:
+        std::cout << "Wrong enum" << std::endl;
         break;
+    }
+
+    render_tex = render_tmp.save(render_power);
+    update_tex_blend();
+}
+
+void Mesh::update_blend(double t)
+{
+    blend_fact = t;
+    update_tex_blend();
+}
+
+void Mesh::update_tex_blend()
+{
+    for (int i = 0; i < render_tex.width(); ++i) {
+        for (int j = 0; j < render_tex.height(); ++j) {
+            QRgb color = render_tex.pixel(i, j);
+            QRgb shade = shading.pixel(i, j);
+            double red = qRed(color) * blend_fact + qRed(shade) *(1 - blend_fact);
+            double green = qGreen(color) * blend_fact + qGreen(shade) *(1 - blend_fact);
+            double blue = qBlue(color) * blend_fact + qBlue(shade) *(1 - blend_fact);
+
+            render_img.setPixel(i, j, qRgb(red, green, blue));
+        }
     }
 }
 
@@ -201,6 +231,13 @@ void Mesh::glTriangle(const Triangles& t)
             double red = qRed(color) / img_max_value;
             double green = qGreen(color) / img_max_value;
             double blue = qBlue(color) / img_max_value;
+
+//            QRgb shade = shading.pixel(v.i, v.j);
+//            float t = 0.1;
+//            red = (red *(1 - t)+ t*qRed(shade)/img_max_value);
+//            blue = (blue * (1 - t)+ t*qBlue(shade)/img_max_value);
+//            green = (green * (1 - t)+ t*qGreen(shade)/img_max_value);
+
             glColor3d(red, green, blue);
         } else {
             glColor3d(0, 0, 0);

@@ -36,6 +36,7 @@ public:
     SF2 normalize(bool& positive) const;
 
     QImage save(double contrast = 1.0) const;
+
 };
 
 #endif // SF2_H
