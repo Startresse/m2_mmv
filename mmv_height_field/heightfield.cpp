@@ -70,6 +70,10 @@ QVector3D HeightField::normal(int i, int j) const
 
 SF2 HeightField::slope_map() const
 {
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+#endif
+
     SF2 sm(Grid2(*this));
 
     for (int i = 0; i < nx; ++i) {
@@ -78,11 +82,22 @@ SF2 HeightField::slope_map() const
         }
     }
 
+
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "slope :" << int(cpu_time % 1000) << "\n";
+#endif
+
     return sm;
 }
 
 SF2 HeightField::avg_slope_map() const
 {
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+#endif
+
     SF2 sm(Grid2(*this));
 
     for (int i = 0; i < nx; ++i) {
@@ -91,11 +106,21 @@ SF2 HeightField::avg_slope_map() const
         }
     }
 
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "avg slope :" << int(cpu_time % 1000) << "\n";
+#endif
+
     return sm;
 }
 
 SF2 HeightField::laplacian_map() const
 {
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+#endif
+
     SF2 lm(Grid2(*this));
 
     for (int i = 0; i < nx; ++i) {
@@ -104,11 +129,21 @@ SF2 HeightField::laplacian_map() const
         }
     }
 
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "laplacian :" << int(cpu_time % 1000) << "\n";
+#endif
+
     return lm;
 }
 
 SF2 HeightField::stream_power() const
 {
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+#endif
+
     SF2 stream = stream_area();
     SF2 slope = slope_map();
     SF2 res(Grid2(*this));
@@ -117,11 +152,22 @@ SF2 HeightField::stream_power() const
             res.at(i, j) = sqrt(stream.at(i, j)) * slope.at(i, j);
         }
     }
+
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "stream power :" << int(cpu_time % 1000) << "\n";
+#endif
+
     return res;
 }
 
 SF2 HeightField::wetness_index() const
 {
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+#endif
+
     SF2 stream = stream_area();
     SF2 slope = slope_map();
     SF2 res(Grid2(*this));
@@ -132,6 +178,13 @@ SF2 HeightField::wetness_index() const
     }
     int mean = std::accumulate(field.begin(), field.end(), 0.0) / field.size();
     res.clamp(0.0, mean/10.0f);
+
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "wetness :" << int(cpu_time % 1000) << "\n";
+#endif
+
     return res;
 }
 
@@ -200,6 +253,10 @@ int HeightField::check_flow_slope(const QPoint& p, FlowTiles* ft) const
 
 SF2 HeightField::stream_area() const
 {
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+#endif
+
     std::vector<ScalarPoint2> points = get_scalar_points();
     std::sort(points.begin(), points.end());
     for (uint i = 0; i < points.size() - 1; ++i) {
@@ -226,6 +283,14 @@ SF2 HeightField::stream_area() const
         }
         assert(abs(checksum - 1.0) < eps);
     }
+
+
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "stream area :" << int(cpu_time % 1000) << "\n";
+#endif
+
 
     return sa;
 

@@ -13,6 +13,8 @@
 #include "opencv2/core.hpp"
 #include "opencv2/highgui.hpp"
 
+#define DISPLAY_TIME
+
 
 class HeightField : public SF2
 {

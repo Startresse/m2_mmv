@@ -5,10 +5,27 @@ void Mesh::load()
     cv::Mat image = cv::imread(image_name.toStdString(), cv::IMREAD_GRAYSCALE);
     hf = HeightField(image, Box2(length_x, length_y), low, high);
 
+#ifdef DISPLAY_TIME
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+    std::cout << "New mesh " << image.cols << "x" << image.rows << std::endl;
+#endif
+
+
+    // REINIT
     shading_done = false;
+
+
+
     blur();
     render();
     set_up();
+
+
+#ifdef DISPLAY_TIME
+    auto cpu_stop = std::chrono::high_resolution_clock::now();
+    int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
+    std::cout << "new mesh :" << int(cpu_time % 1000) << "\n";
+#endif
 }
 
 constexpr double eps_bottom = -0.001;
@@ -141,6 +158,7 @@ void Mesh::render()
     }
 
     render_tex = render_tmp.save(render_power);
+    render_img = render_tex;
     update_tex_blend();
 }
 
@@ -156,9 +174,14 @@ void Mesh::update_tex_blend()
         for (int j = 0; j < render_tex.height(); ++j) {
             QRgb color = render_tex.pixel(i, j);
             QRgb shade = shading.pixel(i, j);
-            double red = qRed(color) * blend_fact + qRed(shade) *(1 - blend_fact);
-            double green = qGreen(color) * blend_fact + qGreen(shade) *(1 - blend_fact);
-            double blue = qBlue(color) * blend_fact + qBlue(shade) *(1 - blend_fact);
+
+            double red = qRed(color) + qRed(shade) * blend_fact ;
+            double green = qGreen(color) + qGreen(shade) * blend_fact;
+            double blue = qBlue(color) + qBlue(shade) * blend_fact ;
+
+            red = std::min(img_max_value, red);
+            green = std::min(img_max_value, green);
+            blue = std::min(img_max_value, blue);
 
             render_img.setPixel(i, j, qRgb(red, green, blue));
         }

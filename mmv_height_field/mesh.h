@@ -61,7 +61,7 @@ private:
     bool shading_done;
     QImage shading;
 
-    double blend_fact = 0.9;
+    double blend_fact = 0.5;
 
     bool closed = true;
 
