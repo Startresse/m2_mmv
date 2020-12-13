@@ -57,11 +57,13 @@ private:
     HeightField hf;
     QImage render_img;
     QImage render_tex;
+
+    bool shading_done;
     QImage shading;
-    bool shading_done = false;
+
     double blend_fact = 0.9;
 
-    bool closed = false;
+    bool closed = true;
 
     QString image_name = "images/heightmap3.jpeg";
     double length_x = 2000;

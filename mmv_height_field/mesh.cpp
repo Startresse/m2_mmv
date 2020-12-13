@@ -5,6 +5,7 @@ void Mesh::load()
     cv::Mat image = cv::imread(image_name.toStdString(), cv::IMREAD_GRAYSCALE);
     hf = HeightField(image, Box2(length_x, length_y), low, high);
 
+    shading_done = false;
     blur();
     render();
     set_up();
@@ -15,8 +16,12 @@ void Mesh::set_up()
 {
     faces.clear();
 
-    // BOTTOM
+    float length_x = hf.size_x()  / 4;
+    float length_y = hf.highest() / 2;
+    float length_z = hf.size_y()  / 4;
+
     if (closed) {
+        // BOTTOM
         faces.emplace_back(QVector3D(-2, eps_bottom, -2),
                            QVector3D(-2, eps_bottom,  2),
                            QVector3D( 2, eps_bottom,  2));
@@ -24,17 +29,9 @@ void Mesh::set_up()
         faces.emplace_back(QVector3D(-2, eps_bottom, -2),
                            QVector3D( 2, eps_bottom, -2),
                            QVector3D( 2, eps_bottom,  2));
-    }
 
-
-    float length_x = hf.size_x()  / 4;
-    float length_y = hf.highest() / 2;
-    float length_z = hf.size_y()  / 4;
-
-    if (closed) {
         // FRONT & BACK
-        std::vector<int> borders = {0, hf.size_y() - 1};
-        for (int j : borders) {
+        for (int j : {0, hf.size_y() - 1}) {
             for (int i = 0; i < hf.size_x() - 1; ++i) {
                 faces.emplace_back( PointIJ(QVector3D((i    )/length_x - 2, hf.height(i    , j) / length_y, -j/length_z + 2), i, j),
                                             QVector3D((i    )/length_x - 2, eps_bottom                    , -j/length_z + 2)       ,
@@ -47,8 +44,7 @@ void Mesh::set_up()
         }
 
         // SIDES
-        borders = {0, hf.size_x() - 1};
-        for (int j : borders) {
+        for (int j : {0, hf.size_x() - 1}) {
             for (int i = 0; i < hf.size_y() - 1; ++i) {
                 faces.emplace_back( PointIJ(QVector3D(j/length_x - 2, hf.height(j, i    ) / length_y, -(i    )/length_z + 2), j, i),
                                             QVector3D(j/length_x - 2, eps_bottom                    , -(i    )/length_z + 2),
@@ -115,6 +111,7 @@ void Mesh::render()
         shading_done = true;
         shading = hf.render(2.0);
     }
+
     SF2 render_tmp;
     switch (render_t) {
     case RENDER:
