@@ -17,6 +17,7 @@ public:
     Grid2(const Box2& b = Box2(), int nx = 0, int ny = 0);
     Grid2(const Grid2& g);
 
+    QPoint invIndex(int i) const;
     int index(int i, int j) const;
     bool inside(int i, int j) const;
     bool border(int i, int j) const;

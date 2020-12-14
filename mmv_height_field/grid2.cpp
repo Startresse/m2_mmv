@@ -17,6 +17,14 @@ int Grid2::index(int i, int j) const
     return i + j * nx;
 }
 
+QPoint Grid2::invIndex(int i) const
+{
+    QPoint res;
+    res.setX(i % nx);
+    res.setY(i / ny);
+    return res;
+}
+
 bool Grid2::inside(int i, int j) const
 {
     return i >= 0 && j >= 0 && i < nx && j < ny;

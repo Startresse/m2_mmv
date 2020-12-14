@@ -20,6 +20,9 @@ void Mesh::load()
     render();
     set_up();
 
+    hf.shortest_path(QPoint(0, 0), QPoint(1, 1));
+    exit(1);
+
 
 #ifdef DISPLAY_TIME
     auto cpu_stop = std::chrono::high_resolution_clock::now();

@@ -336,15 +336,21 @@ double length(const QPoint& a, const QPoint& b)
 
 double HeightField::weight(const QPoint& a, const QPoint& b)
 {
-    double l = length(a, b);
+    QVector2D aa = static_cast<Grid2>(*this).vertex(a.x(), a.y());
+    QVector2D bb = static_cast<Grid2>(*this).vertex(b.x(), b.y());
+    double l = (aa - bb).length();
     return l;
 }
 
 std::vector<QPoint> neig = {
     QPoint( 0,  1),
     QPoint( 0, -1),
-    QPoint( 1, 0),
-    QPoint(-1, 0),
+    QPoint( 1,  0),
+    QPoint(-1,  0),
+    QPoint(-1, -1),
+    QPoint(-1,  1),
+    QPoint( 1, -1),
+    QPoint( 1,  1),
 };
 void HeightField::build_adjacency_list()
 {
@@ -412,6 +418,10 @@ std::list<vertex_t> DijkstraGetShortestPathTo(
     return path;
 }
 
+std::ostream& operator<<(std::ostream& os, const QPoint& p) {
+    os << "(" << p.x() << ", " << p.y() << ")";
+    return os;
+}
 
 
 std::list<vertex_t> HeightField::shortest_path(const QPoint& a, const QPoint& b)
@@ -426,10 +436,13 @@ std::list<vertex_t> HeightField::shortest_path(const QPoint& a, const QPoint& b)
     int dest   = index(b.x(), b.y());
 
     DijkstraComputePaths(source, adjacency_list, min_distance, previous);
-    std::cout << "Distance from 0 to " << dest << " : " << min_distance[dest] << std::endl;
+    std::cout << "Distance from " << a << " to " << b << " : " << min_distance[dest] << std::endl;
     std::list<vertex_t> path = DijkstraGetShortestPathTo(dest, previous);
     std::cout << "Path : ";
-    std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
+//    std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
+    for (vertex_t i : path) {
+        std::cout << invIndex(i) << " ";
+    }
     std::cout << std::endl;
     return path;
 }
