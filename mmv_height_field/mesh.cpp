@@ -20,7 +20,7 @@ void Mesh::load()
     render();
     set_up();
 
-    hf.shortest_path(QPoint(0, 0), QPoint(1, 1));
+    hf.shortest_path(QPoint(0, 0), QPoint(2, 2));
     exit(1);
 
 

@@ -336,6 +336,7 @@ double length(const QPoint& a, const QPoint& b)
 
 double HeightField::weight(const QPoint& a, const QPoint& b)
 {
+//    if (a.x() == a.y() && b.x() == b.y()) return 500;
     QVector2D aa = static_cast<Grid2>(*this).vertex(a.x(), a.y());
     QVector2D bb = static_cast<Grid2>(*this).vertex(b.x(), b.y());
     double l = (aa - bb).length();
