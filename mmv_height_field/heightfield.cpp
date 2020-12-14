@@ -324,3 +324,115 @@ QImage HeightField::render(double contrast) const
 
 
 
+/* SHORTEST PATH */
+
+
+double length(const QPoint& a, const QPoint& b)
+{
+    double x = a.x() - b.x();
+    double y = a.y() - b.y();
+    return sqrt(x*x + y*y);
+}
+
+double HeightField::weight(const QPoint& a, const QPoint& b)
+{
+    double l = length(a, b);
+    return l;
+}
+
+std::vector<QPoint> neig = {
+    QPoint( 0,  1),
+    QPoint( 0, -1),
+    QPoint( 1, 0),
+    QPoint(-1, 0),
+};
+void HeightField::build_adjacency_list()
+{
+    adjacency_list.clear();
+    adjacency_list.resize(nx*ny);
+    for (int i = 0; i < nx; ++i) {
+        for (int j = 0; j < ny; ++j) {
+            for (const QPoint& n : neig) {
+                int ii = i + n.x();
+                int jj = j + n.y();
+                adjacency_list[index(i, j)].push_back(neighbor(index(ii, jj), weight(QPoint(i, j), QPoint(ii, jj))));
+            }
+        }
+    }
+    list_built = true;
+}
+
+void DijkstraComputePaths(vertex_t source,
+                          const adjacency_list_t &adjacency_list,
+                          std::vector<weight_t> &min_distance,
+                          std::vector<vertex_t> &previous)
+{
+    int n = adjacency_list.size();
+    min_distance.clear();
+    min_distance.resize(n, max_weight);
+    min_distance[source] = 0;
+    previous.clear();
+    previous.resize(n, -1);
+    std::set<std::pair<weight_t, vertex_t>> vertex_queue;
+    vertex_queue.insert(std::make_pair(min_distance[source], source));
+
+    while (!vertex_queue.empty())
+    {
+        weight_t dist = vertex_queue.begin()->first;
+        vertex_t u = vertex_queue.begin()->second;
+        vertex_queue.erase(vertex_queue.begin());
+
+        // Visit each edge exiting u
+        const std::vector<neighbor> &neighbors = adjacency_list[u];
+        for (std::vector<neighbor>::const_iterator neighbor_iter = neighbors.begin();
+             neighbor_iter != neighbors.end();
+             neighbor_iter++)
+        {
+            vertex_t v = neighbor_iter->target;
+            weight_t weight = neighbor_iter->weight;
+            weight_t distance_through_u = dist + weight;
+            if (distance_through_u < min_distance[v])
+            {
+                vertex_queue.erase(std::make_pair(min_distance[v], v));
+
+                min_distance[v] = distance_through_u;
+                previous[v] = u;
+                vertex_queue.insert(std::make_pair(min_distance[v], v));
+            }
+        }
+    }
+}
+
+std::list<vertex_t> DijkstraGetShortestPathTo(
+    vertex_t vertex, const std::vector<vertex_t> &previous)
+{
+    std::list<vertex_t> path;
+    for (; vertex != -1; vertex = previous[vertex])
+        path.push_front(vertex);
+    return path;
+}
+
+
+
+std::list<vertex_t> HeightField::shortest_path(const QPoint& a, const QPoint& b)
+{
+    if (!list_built)
+        build_adjacency_list();
+
+    std::vector<weight_t> min_distance;
+    std::vector<vertex_t> previous;
+
+    int source = index(a.x(), a.y());
+    int dest   = index(b.x(), b.y());
+
+    DijkstraComputePaths(source, adjacency_list, min_distance, previous);
+    std::cout << "Distance from 0 to " << dest << " : " << min_distance[dest] << std::endl;
+    std::list<vertex_t> path = DijkstraGetShortestPathTo(dest, previous);
+    std::cout << "Path : ";
+    std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
+    std::cout << std::endl;
+    return path;
+}
+
+
+
