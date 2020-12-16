@@ -88,6 +88,7 @@ public:
     int size_y() const {return ny;}
     int highest() const {return high;}
     int lowest() const {return low;}
+    bool water(const QPoint& a) {return height(a.x(), a.y()) <= low + 0.0001;}
 
 
     // Dijkstra related

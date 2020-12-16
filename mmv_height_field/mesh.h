@@ -37,7 +37,7 @@ enum render_type {
     SLOPE,
     AVG_SLOPE,
     WETNESS,
-
+    ROAD,
 };
 
 enum images {
@@ -63,7 +63,8 @@ private:
 
     double blend_fact = 0.5;
 
-    bool closed = true;
+    bool closed = false;
+    bool fill_road = true;
 
     QString image_name = "images/heightmap3.jpeg";
     double length_x = 2000;
@@ -100,6 +101,8 @@ public:
 
     void update_tex_blend();
     void update_blend(double t);
+
+    QImage display_road();
 
     void glTriangle(const Triangles& t);
     void draw();

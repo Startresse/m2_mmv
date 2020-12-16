@@ -20,8 +20,8 @@ void Mesh::load()
     render();
     set_up();
 
-    hf.shortest_path(QPoint(0, 0), QPoint(2, 2));
-    exit(1);
+//    hf.shortest_path(QPoint(0, 0), QPoint(2, 2));
+//    exit(1);
 
 
 #ifdef DISPLAY_TIME
@@ -37,7 +37,7 @@ void Mesh::set_up()
     faces.clear();
 
     float length_x = hf.size_x()  / 4;
-    float length_y = hf.highest() / 2;
+    float length_y = (hf.highest() - hf.lowest()) / 2;
     float length_z = hf.size_y()  / 4;
 
     if (closed) {
@@ -155,6 +155,9 @@ void Mesh::render()
     case WETNESS:
         render_tmp = hf.wetness_index();
         break;
+    case ROAD:
+        render_img = display_road();
+        return;
     default:
         std::cout << "Wrong enum" << std::endl;
         break;
@@ -190,6 +193,36 @@ void Mesh::update_tex_blend()
         }
     }
 }
+
+
+QImage Mesh::display_road()
+{
+    QImage ret = shading;
+    std::list<vertex_t> path = hf.shortest_path(QPoint(0, 0), QPoint(hf.size_x() - 1, hf.size_y() - 1));
+    if (fill_road) {
+        vertex_t last = -1;
+            for (vertex_t i : path) {
+            if (last != -1) {
+                QPoint p = hf.invIndex(i);
+                QPoint q = hf.invIndex(last);
+                for (int j = std::min(p.x(), q.x()); j <= std::max(p.x(), q.x()); ++j){
+                    for (int k = std::min(p.y(), q.y()); k <= std::max(p.y(), q.y()); ++k) {
+                        ret.setPixel(j, k, qRgb(img_max_value, 0, 0));
+                    }
+                }
+            }
+            last = i;
+        }
+    }
+    else {
+        for (vertex_t i : path) {
+            QPoint p = hf.invIndex(i);
+            ret.setPixel(p.x(), p.y(), qRgb(img_max_value, 0, 0));
+        }
+    }
+    return ret;
+}
+
 
 void Mesh::update_file(int file_id)
 {
@@ -278,3 +311,4 @@ void Mesh::draw() {
         glTriangle(t);
     glEnd();
 }
+

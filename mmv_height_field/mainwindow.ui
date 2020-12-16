@@ -127,6 +127,11 @@
             <string>Wetness</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Road</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item row="2" column="0">

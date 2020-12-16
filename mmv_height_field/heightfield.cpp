@@ -334,25 +334,61 @@ double length(const QPoint& a, const QPoint& b)
     return sqrt(x*x + y*y);
 }
 
-double HeightField::weight(const QPoint& a, const QPoint& b)
+weight_t HeightField::weight(const QPoint& a, const QPoint& b)
 {
-//    if (a.x() == a.y() && b.x() == b.y()) return 500;
+    assert(inside(a.x(), a.y()) && inside(b.x(), b.y()));
+
+//    if (water(a) || water(b))
+//        return max_weight;
+
     QVector2D aa = static_cast<Grid2>(*this).vertex(a.x(), a.y());
     QVector2D bb = static_cast<Grid2>(*this).vertex(b.x(), b.y());
     double l = (aa - bb).length();
-    return l;
+
+    double relative_slope = fabs(height(a.x(), a.y()) - height(b.x(), b.y()));
+
+    return l * (relative_slope + 1.0);
 }
 
 std::vector<QPoint> neig = {
-    QPoint( 0,  1),
-    QPoint( 0, -1),
+    // 4 connect
     QPoint( 1,  0),
+    QPoint( 0,  1),
     QPoint(-1,  0),
-    QPoint(-1, -1),
-    QPoint(-1,  1),
-    QPoint( 1, -1),
+    QPoint( 0, -1),
+    // 8 connect
     QPoint( 1,  1),
+    QPoint(-1,  1),
+    QPoint(-1, -1),
+    QPoint( 1, -1),
+    // M2
+    QPoint( 2,  1),
+    QPoint( 1,  2),
+    QPoint(-1,  2),
+    QPoint(-2,  1),
+    QPoint(-2, -1),
+    QPoint(-1, -2),
+    QPoint( 1, -2),
+    QPoint( 2, -1),
+    // M3
+    QPoint( 3,  1),
+    QPoint( 3,  2),
+    QPoint( 2,  3),
+    QPoint( 1,  3),
+    QPoint(-1,  3),
+    QPoint(-3,  2),
+    QPoint(-2,  3),
+    QPoint(-3,  1),
+    QPoint(-3, -1),
+    QPoint(-3, -2),
+    QPoint(-2, -3),
+    QPoint(-1, -3),
+    QPoint( 1, -3),
+    QPoint( 3, -2),
+    QPoint( 2, -3),
+    QPoint( 3, -1),
 };
+
 void HeightField::build_adjacency_list()
 {
     adjacency_list.clear();
@@ -362,7 +398,8 @@ void HeightField::build_adjacency_list()
             for (const QPoint& n : neig) {
                 int ii = i + n.x();
                 int jj = j + n.y();
-                adjacency_list[index(i, j)].push_back(neighbor(index(ii, jj), weight(QPoint(i, j), QPoint(ii, jj))));
+                if (inside(ii, jj))
+                    adjacency_list[index(i, j)].push_back(neighbor(index(ii, jj), weight(QPoint(i, j), QPoint(ii, jj))));
             }
         }
     }
@@ -437,14 +474,13 @@ std::list<vertex_t> HeightField::shortest_path(const QPoint& a, const QPoint& b)
     int dest   = index(b.x(), b.y());
 
     DijkstraComputePaths(source, adjacency_list, min_distance, previous);
-    std::cout << "Distance from " << a << " to " << b << " : " << min_distance[dest] << std::endl;
+//    std::cout << "Distance from " << a << " to " << b << " : " << min_distance[dest] << std::endl;
     std::list<vertex_t> path = DijkstraGetShortestPathTo(dest, previous);
-    std::cout << "Path : ";
-//    std::copy(path.begin(), path.end(), std::ostream_iterator<vertex_t>(std::cout, " "));
-    for (vertex_t i : path) {
-        std::cout << invIndex(i) << " ";
-    }
-    std::cout << std::endl;
+//    std::cout << "Path : ";
+//    for (vertex_t i : path) {
+//        std::cout << invIndex(i) << " ";
+//    }
+//    std::cout << std::endl;
     return path;
 }
 
