@@ -58,8 +58,14 @@ void GLDisplayWidget::resizeGL(int width, int height){
 // When you click, the position of your mouse is saved
 void GLDisplayWidget::mousePressEvent(QMouseEvent *event)
 {
-    if( event != NULL )
+    if( event != nullptr )
         _lastPosMouse = event->pos();
+
+    if ( record_mouse_click )
+    {
+        std::cout << "test" << std::endl;
+        record_mouse_click = false;
+    }
 }
 
 // Mouse movement management
@@ -68,7 +74,7 @@ void GLDisplayWidget::mouseMoveEvent(QMouseEvent *event)
     int dx = event->x() - _lastPosMouse.x();
     int dy = event->y() - _lastPosMouse.y();
 
-    if( event != NULL )
+    if( event != nullptr )
     {
         rotateBy(dy*8.0, 0     , 0);
         rotateBy(0     , dx*8.0, 0);

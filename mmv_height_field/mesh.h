@@ -78,6 +78,9 @@ private:
     int blur_strength = 1.0;
     bool blur_no_median = true;
 
+    QPoint path_begin;
+    QPoint path_end;
+
 public:
     Mesh() {
         load();
@@ -103,6 +106,7 @@ public:
     void update_blend(double t);
 
     QImage display_road();
+    void update_path(const QPoint& a, const QPoint& b);
 
     void glTriangle(const Triangles& t);
     void draw();

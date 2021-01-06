@@ -20,9 +20,7 @@ void Mesh::load()
     render();
     set_up();
 
-//    hf.shortest_path(QPoint(0, 0), QPoint(2, 2));
-//    exit(1);
-
+    update_path(QPoint(0, 0), QPoint(hf.size_x() - 1, hf.size_y() - 1));
 
 #ifdef DISPLAY_TIME
     auto cpu_stop = std::chrono::high_resolution_clock::now();
@@ -194,11 +192,16 @@ void Mesh::update_tex_blend()
     }
 }
 
+void Mesh::update_path(const QPoint& a, const QPoint& b)
+{
+    path_begin = a;
+    path_end = b;
+}
 
 QImage Mesh::display_road()
 {
     QImage ret = shading;
-    std::list<vertex_t> path = hf.shortest_path(QPoint(0, 0), QPoint(hf.size_x() - 1, hf.size_y() - 1));
+    std::list<vertex_t> path = hf.shortest_path(path_begin, path_end);
     if (fill_road) {
         vertex_t last = -1;
             for (vertex_t i : path) {

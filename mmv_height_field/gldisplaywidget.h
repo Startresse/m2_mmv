@@ -18,6 +18,8 @@ public:
     void paintGL(); // Display the scene Gl
     void resizeGL(int width, int height);
 
+    void activate_mouse_record() {record_mouse_click = true;}
+
     GeometricWorld& get_world() {return _geomWorld;}
 
 
@@ -33,6 +35,8 @@ private:
     QTimer _timer; // To update the scene
     float distance = 5.0;
     float x_rot = 0, y_rot = 0, z_rot = 0;
+
+    bool record_mouse_click = false;
 
     QPoint _lastPosMouse; // To keep the last position of the mouse
 
