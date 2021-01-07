@@ -326,41 +326,37 @@ QImage HeightField::render(double contrast) const
 
 /* SHORTEST PATH */
 
-
-//double length(const QPoint& a, const QPoint& b)
-//{
-//    double x = a.x() - b.x();
-//    double y = a.y() - b.y();
-//    return sqrt(x*x + y*y);
-//}
+const double sqrt_2 = sqrt(2.0);
 
 weight_t HeightField::weight(const QPoint& a, const QPoint& b)
 {
     assert(inside(a.x(), a.y()) && inside(b.x(), b.y()));
 
-//    if (water(a) || water(b))
-//        return max_weight;
-
     QVector2D aa = static_cast<Grid2>(*this).vertex(a.x(), a.y());
     QVector2D bb = static_cast<Grid2>(*this).vertex(b.x(), b.y());
-    double l = (aa - bb).length();
+    double l = (aa - bb).length() * cell_diag.length() / sqrt_2; // squared cells -> estimate cell width
+                                                                 // else -> calculate width and height depending on neighborhood
 
-    double relative_slope = fabs(height(a.x(), a.y()) - height(b.x(), b.y()));
+    double relative_slope = 10.0 * fabs(height(a.x(), a.y()) - height(b.x(), b.y())) / l;
+    relative_slope *= relative_slope;
 
     return l * (relative_slope + 1.0);
 }
 
 std::vector<QPoint> neig = {
+
     // 4 connect
     QPoint( 1,  0),
     QPoint( 0,  1),
     QPoint(-1,  0),
     QPoint( 0, -1),
+
     // 8 connect
     QPoint( 1,  1),
     QPoint(-1,  1),
     QPoint(-1, -1),
     QPoint( 1, -1),
+
     // M2
     QPoint( 2,  1),
     QPoint( 1,  2),
@@ -370,6 +366,7 @@ std::vector<QPoint> neig = {
     QPoint(-1, -2),
     QPoint( 1, -2),
     QPoint( 2, -1),
+
     // M3
     QPoint( 3,  1),
     QPoint( 3,  2),
@@ -390,6 +387,7 @@ std::vector<QPoint> neig = {
     QPoint( 3, -2),
     QPoint( 2, -3),
     QPoint( 3, -1),
+
 };
 
 void HeightField::build_adjacency_list()

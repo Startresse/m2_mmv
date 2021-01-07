@@ -64,7 +64,7 @@ private:
     double blend_fact = 0.5;
 
     bool closed = false;
-    bool fill_road = true;
+    bool fill_road = false;
 
     QString image_name = "images/heightmap3.jpeg";
     double length_x = 2000;

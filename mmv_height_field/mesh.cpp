@@ -20,8 +20,6 @@ void Mesh::load()
     render();
     set_up();
 
-    update_path(QPoint(0, 0), QPoint(hf.size_x() - 1, hf.size_y() - 1));
-
 #ifdef DISPLAY_TIME
     auto cpu_stop = std::chrono::high_resolution_clock::now();
     int cpu_time = std::chrono::duration_cast<std::chrono::milliseconds>(cpu_stop - cpu_start).count();
@@ -290,12 +288,6 @@ void Mesh::glTriangle(const Triangles& t)
             double red = qRed(color) / img_max_value;
             double green = qGreen(color) / img_max_value;
             double blue = qBlue(color) / img_max_value;
-
-//            QRgb shade = shading.pixel(v.i, v.j);
-//            float t = 0.1;
-//            red = (red *(1 - t)+ t*qRed(shade)/img_max_value);
-//            blue = (blue * (1 - t)+ t*qBlue(shade)/img_max_value);
-//            green = (green * (1 - t)+ t*qGreen(shade)/img_max_value);
 
             glColor3d(red, green, blue);
         } else {

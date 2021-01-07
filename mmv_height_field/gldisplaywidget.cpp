@@ -62,6 +62,11 @@ QPointF GLDisplayWidget::relative_point(const QPoint& p)
     );
 }
 
+std::ostream& operator<<(std::ostream& os, const QPointF& p) {
+    os << "(" << p.x() << ", " << p.y() << ")";
+    return os;
+}
+
 // - - - - - - - - - - - - Mouse Management  - - - - - - - - - - - - - - - -
 // When you click, the position of your mouse is saved
 void GLDisplayWidget::mousePressEvent(QMouseEvent *event)

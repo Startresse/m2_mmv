@@ -39,6 +39,7 @@ struct neighbor
 
 typedef std::vector<std::vector<neighbor>> adjacency_list_t;
 
+std::ostream& operator<<(std::ostream& os, const QPoint& p);
 
 
 class HeightField : public SF2
