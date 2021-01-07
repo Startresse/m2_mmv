@@ -327,12 +327,12 @@ QImage HeightField::render(double contrast) const
 /* SHORTEST PATH */
 
 
-double length(const QPoint& a, const QPoint& b)
-{
-    double x = a.x() - b.x();
-    double y = a.y() - b.y();
-    return sqrt(x*x + y*y);
-}
+//double length(const QPoint& a, const QPoint& b)
+//{
+//    double x = a.x() - b.x();
+//    double y = a.y() - b.y();
+//    return sqrt(x*x + y*y);
+//}
 
 weight_t HeightField::weight(const QPoint& a, const QPoint& b)
 {
@@ -375,14 +375,17 @@ std::vector<QPoint> neig = {
     QPoint( 3,  2),
     QPoint( 2,  3),
     QPoint( 1,  3),
+
     QPoint(-1,  3),
     QPoint(-3,  2),
     QPoint(-2,  3),
     QPoint(-3,  1),
+
     QPoint(-3, -1),
     QPoint(-3, -2),
     QPoint(-2, -3),
     QPoint(-1, -3),
+
     QPoint( 1, -3),
     QPoint( 3, -2),
     QPoint( 2, -3),
@@ -474,13 +477,8 @@ std::list<vertex_t> HeightField::shortest_path(const QPoint& a, const QPoint& b)
     int dest   = index(b.x(), b.y());
 
     DijkstraComputePaths(source, adjacency_list, min_distance, previous);
-//    std::cout << "Distance from " << a << " to " << b << " : " << min_distance[dest] << std::endl;
     std::list<vertex_t> path = DijkstraGetShortestPathTo(dest, previous);
-//    std::cout << "Path : ";
-//    for (vertex_t i : path) {
-//        std::cout << invIndex(i) << " ";
-//    }
-//    std::cout << std::endl;
+
     return path;
 }
 

@@ -54,6 +54,14 @@ void GLDisplayWidget::resizeGL(int width, int height){
     updateGL();
 }
 
+QPointF GLDisplayWidget::relative_point(const QPoint& p)
+{
+    return QPointF(
+        static_cast<double>(p.x()) / width(),
+        static_cast<double>(p.y()) / height()
+    );
+}
+
 // - - - - - - - - - - - - Mouse Management  - - - - - - - - - - - - - - - -
 // When you click, the position of your mouse is saved
 void GLDisplayWidget::mousePressEvent(QMouseEvent *event)
@@ -61,10 +69,22 @@ void GLDisplayWidget::mousePressEvent(QMouseEvent *event)
     if( event != nullptr )
         _lastPosMouse = event->pos();
 
-    if ( record_mouse_click )
-    {
-        std::cout << "test" << std::endl;
-        record_mouse_click = false;
+    switch ( record_mouse_click ) {
+    case FIRST:
+        click0 = relative_point(event->pos());
+
+        record_mouse_click = SECOND;
+        break;
+    case SECOND:
+        click1 = relative_point(event->pos());
+
+        _geomWorld.get_mesh().update_path(click0, click1);
+        _geomWorld.get_mesh().update_render_type(ROAD);
+
+        record_mouse_click = DONE;
+        break;
+    default:
+        break;
     }
 }
 

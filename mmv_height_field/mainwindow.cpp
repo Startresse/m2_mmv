@@ -15,11 +15,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_comboBox_activated(int index)
 {
-    ui->widget->get_world().get_mesh().update_render_type(index);
     if (index == ROAD)
-    {
         findChild<GLDisplayWidget*>("widget")->activate_mouse_record();
-    }
+    else
+        ui->widget->get_world().get_mesh().update_render_type(index);
 }
 
 void MainWindow::on_doubleSpinBox_valueChanged(double arg1)

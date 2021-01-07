@@ -35,7 +35,7 @@ void Mesh::set_up()
     faces.clear();
 
     float length_x = hf.size_x()  / 4;
-    float length_y = (hf.highest() - hf.lowest()) / 2;
+    float length_y = (hf.highest() - hf.lowest());
     float length_z = hf.size_y()  / 4;
 
     if (closed) {
@@ -192,10 +192,10 @@ void Mesh::update_tex_blend()
     }
 }
 
-void Mesh::update_path(const QPoint& a, const QPoint& b)
+void Mesh::update_path(const QPointF& a, const QPointF& b)
 {
-    path_begin = a;
-    path_end = b;
+    path_begin = QPoint(a.x() * hf.size_x(), a.y() * hf.size_y());
+    path_end = QPoint(b.x() * hf.size_x(), b.y() * hf.size_y());
 }
 
 QImage Mesh::display_road()

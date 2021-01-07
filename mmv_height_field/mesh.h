@@ -106,7 +106,7 @@ public:
     void update_blend(double t);
 
     QImage display_road();
-    void update_path(const QPoint& a, const QPoint& b);
+    void update_path(const QPointF& a, const QPointF& b);
 
     void glTriangle(const Triangles& t);
     void draw();
